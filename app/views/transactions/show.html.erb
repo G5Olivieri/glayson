@@ -1,0 +1,12 @@
+<h1>Name: <%= @transaction.name %></h1>
+<h1>Amount: <%= @transaction.amount %></h1>
+<h1>Datetime: <%= @transaction.datetime %></h1>
+<h1>description: <%= @transaction.description %></h1>
+
+<nav>
+  <%= link_to 'Edit', edit_transaction_path(@transaction) %>
+  <%= link_to 'Destroy', @transaction, data: {
+    turbo_method: :delete,
+    turbo_confirm: "Are you sure?"
+  } %>
+</nav>

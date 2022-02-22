@@ -1,0 +1,24 @@
+<%= form_with model: transaction do |form| %>
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name, autofocus: 'autofocus' %>
+  </div>
+  <div>
+    <%= form.label :amount %>
+    <%= form.number_field :amount %>
+  </div>
+
+  <div>
+    <%= form.label :datetime %>
+    <%= form.date_field :datetime %>
+  </div>
+
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

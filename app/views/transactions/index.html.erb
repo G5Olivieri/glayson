@@ -1,0 +1,20 @@
+<h1>Transactions</h1>
+
+<nav>
+  <%= link_to "New transaction", new_transaction_path %>
+</nav>
+
+<ul>
+<% @transactions.each_entry do |transaction_by_date| %>
+  <li>
+    <span>Date: <%= transaction_by_date[0] %></span>
+    <ul>
+      <% transaction_by_date[1].each do |transaction| %>
+        <li>
+          <%= link_to "#{transaction.name} - #{number_to_currency(transaction.amount / 100, unit: 'R$', separator: ',', delimiter: '.')}", transaction %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+<% end %>
+</ul>

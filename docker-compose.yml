@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    depends_on:
+      - postgres
+    command: ./bin/rails server -b 0.0.0.0 -p 3000
+    environment:
+      HTTP_BASIC_AUTH_USERNAME: dev
+      HTTP_BASIC_AUTH_PASSWORD: dev
+      DATABASE_HOST: postgres
+      DATABASE_PASSWORD: dev
+      DATABASE_USERNAME: postgres
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@email.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+      - 8080:8080
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: dev
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres:/var/lib/postgresql/data/pgdata
+
+volumes:
+  bundle:
+  postgres:
