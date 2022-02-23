@@ -46,15 +46,14 @@ a {
 
 .app__form__control {
   font-size: 1.5rem;
-  width: 100%;
 }
 
 .app__form {
-  width: 320px;
 }
 
 .app__form__text {
   height: 40px;
+  font-size: 1.5rem;
 }
 
 .app__form__checkbox {}

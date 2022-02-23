@@ -2,11 +2,11 @@
 
 class NotesController < ApplicationController
   def index
-    @notes = Note.all
+    @notes = Note.all.with_rich_text_body
   end
 
   def show
-    @note = Note.find(params[:id])
+    @note = Note.find(params[:id]).with_rich_text_body
   end
 
   def new
@@ -23,11 +23,11 @@ class NotesController < ApplicationController
   end
 
   def edit
-    @note = Note.find(params[:id])
+    @note = Note.find(params[:id]).with_rich_text_body
   end
 
   def update
-    @note = Note.find(params[:id])
+    @note = Note.find(params[:id]).with_rich_text_body
     if @note.update(note_params)
       redirect_to @note
     else
