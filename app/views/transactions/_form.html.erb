@@ -1,24 +1,24 @@
-<%= form_with model: transaction do |form| %>
-  <div>
+<%= form_with model: transaction, class: 'app__form' do |form| %>
+  <div class="app__form__control app__form__control__text">
     <%= form.label :name %>
-    <%= form.text_field :name, autofocus: 'autofocus' %>
+    <%= form.text_field :name, autofocus: 'autofocus', class: 'app__form__text' %>
   </div>
-  <div>
+  <div class="app__form__control app__form__control__text">
     <%= form.label :amount %>
-    <%= form.number_field :amount %>
+    <%= form.number_field :amount, class: 'app__form__text' %>
   </div>
 
-  <div>
+  <div class="app__form__control app__form__control__text">
     <%= form.label :datetime %>
-    <%= form.date_field :datetime %>
+    <%= form.date_field :datetime, class: 'app__form__text' %>
   </div>
 
-  <div>
+  <div class="app__form__control app__form__control__text">
     <%= form.label :description %>
-    <%= form.text_area :description %>
+    <%= form.text_field :description, class: 'app__form__text' %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="app__form__control app__form__text">
+    <%= form.submit class: 'app__form__submit' %>
   </div>
 <% end %>

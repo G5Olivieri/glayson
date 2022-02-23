@@ -1,13 +1,13 @@
-<%= form_with model: task do |form| %>
-  <div>
+<%= form_with model: task, class: 'app__form' do |form| %>
+  <div class="app__form__control app__form__control__text">
     <%= form.label :name %>
-    <%= form.text_field :name, autofocus: 'autofocus' %>
+    <%= form.text_field :name, autofocus: 'autofocus', class: 'app__form__text' %>
   </div>
-  <div>
+  <div class="app__form__control">
     <%= form.label :done %>
-    <%= form.check_box :done %>
+    <%= form.check_box :done, class: 'app__form__checkbox' %>
   </div>
-  <div>
-    <%= form.submit %>
+  <div class="app__form__control">
+    <%= form.submit class: 'app__form__submit' %>
   </div>
 <% end %>

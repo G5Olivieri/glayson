@@ -11,16 +11,23 @@
   </head>
 
   <body>
-    <header>
-      <nav>
-        <ul>
-          <li><%= link_to 'transactions', transactions_path %></li>
-          <li><%= link_to 'tasks', tasks_path %></li>
-          <li><%= link_to 'notes', notes_path %></li>
+    <header class="app__header">
+      <nav class="app__header__nav">
+        <ul class="app__header__list">
+          <li class="app__header__list__item">
+            <%= link_to 'transactions', transactions_path, class: 'app__header__link' %>
+          </li>
+          <li class="app__header__list__item">
+            <%= link_to 'tasks', tasks_path, class: 'app__header__link' %>
+          </li>
+          <li class="app__header__list__item">
+            <%= link_to 'notes', notes_path, class: 'app__header__link' %>
+          </li>
         </ul>
       </nav>
     </header>
-    <main>
+
+    <main class="app__main">
       <%= yield %>
     </main>
   </body>
