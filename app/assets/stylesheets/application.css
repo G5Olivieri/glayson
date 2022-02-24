@@ -26,7 +26,8 @@ a {
 
 .app__header {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .app__header__list__item {
@@ -66,4 +67,8 @@ a {
 .app__form__control__text {
   display: flex;
   flex-direction: column;
+}
+
+.app__alert {
+  color: red;
 }

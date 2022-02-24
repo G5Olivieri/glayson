@@ -9,8 +9,8 @@ down:
 shell:
 	docker-compose run --rm app sh
 
-root_shell:
-	docker-compose run --rm --user root app sh
+bundle_install:
+	docker-compose run --rm --user root app sh -c "bundle install"
 
 logs:
 	docker-compose logs -f app

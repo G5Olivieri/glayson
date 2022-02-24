@@ -1,47 +1,61 @@
 # frozen_string_literal: true
 
-class TransactionsController < ApplicationController
+class TransactionsController < RequireAuthController
+  before_action :set_transaction, only: %i[show edit update destroy]
+
   def index
-    @transactions = Transaction.all.group_by { |transaction| transaction.datetime.to_date }
+    @transactions = Transaction.all
   end
 
-  def show
-    @transaction = Transaction.find(params[:id])
-  end
+  def show; end
 
   def new
     @transaction = Transaction.new
   end
 
+  def edit; end
+
   def create
-    @transaction = Transaction.new(transaction_params)
-    if @transaction.save
-      redirect_to @transaction
-    else
-      render :new, status: :unprocessable_entity
+    @transaction = Note.new(transaction_params)
+
+    respond_to do |format|
+      if @transaction.save
+        format.html { redirect_to transaction_url(@transaction), notice: 'Transaction was successfully created.' }
+        format.json { render :show, status: :created, location: @transaction }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @transaction.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  def edit
-    @transaction = Transaction.find(params[:id])
-  end
 
   def update
-    @transaction = Transaction.find(params[:id])
-    if @transaction.update(transaction_params)
-      redirect_to @transaction
-    else
-      render :edit, status: :unprocessable_entity
+    respond_to do |format|
+      if @transaction.update(transaction_params)
+        format.html { redirect_to transaction_url(@transaction), notice: 'Transaction was successfully updated.' }
+        format.json { render :show, status: :ok, location: @transaction }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @transaction.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
-    @transaction = Transaction.find(params[:id])
     @transaction.destroy
-    redirect_to transactions_path, status: :see_other
+
+    respond_to do |format|
+      format.html { redirect_to transactions_url, notice: 'Transaction was successfully destroyed.' }
+      format.json { head :no_content }
+    end
   end
 
   private
+
+  def set_transaction
+    @transaction = Transaction.find(params[:id])
+  end
 
   def transaction_params
     params.require(:transaction).permit(:name, :description, :amount, :datetime)

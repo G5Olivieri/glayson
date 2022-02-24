@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   # root "articles#index"
   root 'home#index'
 
+  resources :users
+  resources :sessions, only: %i[new create destroy]
+  get 'login', to: 'sessions#new', as: 'login'
+  get 'logout', to: 'sessions#destroy', as: 'logout'
+
   resources :notes
   resources :transactions
 
@@ -14,13 +19,4 @@ Rails.application.routes.draw do
     get :done, :todo
   end
   resources :tasks
-
-  namespace :api do
-    resources :tasks
-    resources :transactions
-    resources :notes
-    namespace :tasks do
-      get :done, :todo
-    end
-  end
 end

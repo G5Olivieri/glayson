@@ -5,7 +5,7 @@
 </nav>
 
 <ul>
-<% @transactions.each_entry do |transaction_by_date| %>
+  <% @transactions.group_by {|t| t.datetime.to_date }.each_entry do |transaction_by_date| %>
   <li>
     <span>Date: <%= transaction_by_date[0] %></span>
     <ul>

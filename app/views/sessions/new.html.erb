@@ -1,0 +1,21 @@
+<h1>Login</h1>
+
+<% if flash[:alert] %>
+  <div class="app__alert">
+    <%= alert %>
+  </div>
+<% end %>
+
+<%= form_with url: sessions_path, data: { turbo: false }, class: 'app__form' do |form| %>
+  <div class="app__form__control app__form__control__text">
+    <%= form.label :username %>
+    <%= form.text_field :username, autofocus: 'autofocus', class: 'app__form__text' %>
+  </div>
+  <div class="app__form__control app__form__control__text">
+    <%= form.label :password %>
+    <%= form.password_field :password, class: 'app__form__text' %>
+  </div>
+  <div class="app__form__control">
+    <%= form.submit 'Login', class: 'app__form__submit' %>
+  </div>
+<% end %>
