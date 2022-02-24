@@ -3,28 +3,42 @@
 class TasksController < RequireAuthController
   before_action :set_task, only: %i[show edit update destroy]
 
-  def index
-    @tasks = Task.all
+  def index; end
+
+  def show
+    authorize @task
   end
 
-  def show; end
-
-  def edit; end
+  def edit
+    authorize @task
+  end
 
   def done
     @tasks = Task.where(done: true)
+      .and(
+        Task.where(can_show: true)
+          .or(Task.where(user: current_user))
+      )
   end
 
   def todo
     @tasks = Task.where(done: false)
+      .and(
+        Task.where(can_show: true)
+          .or(Task.where(user: current_user))
+      )
   end
 
   def new
     @task = Task.new
+    authorize @task
   end
 
   def create
     @task = Task.new(task_params)
+    @task.user = current_user
+
+    authorize @task
 
     respond_to do |format|
       if @task.save
@@ -66,6 +80,6 @@ class TasksController < RequireAuthController
   end
 
   def task_params
-    params.require(:task).permit(:name, :done)
+    params.require(:task).permit(:name, :done, :can_show, :can_edit, :can_destroy)
   end
 end

@@ -3,8 +3,8 @@
 class RequireAuthFilter
   def self.basic_authenticate(controller)
     user = ActionController::HttpAuthentication::Basic.authenticate(controller.request) do |given_name, given_password|
-         user = User.find_by_username(given_name)
-         return user if user && user.authenticate(given_password)
+       user = User.find_by_username(given_name)
+       return user if user && user.authenticate(given_password)
     end
 
     if user

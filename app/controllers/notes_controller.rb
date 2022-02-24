@@ -4,7 +4,7 @@ class NotesController < RequireAuthController
   before_action :set_note, only: %i[show edit update destroy]
 
   def index
-    @notes = Note.all
+    @notes = Note.where(user: current_user).or(Note.where(can_show: true))
   end
 
   def show; end
@@ -17,6 +17,8 @@ class NotesController < RequireAuthController
 
   def create
     @note = Note.new(note_params)
+
+    authorize @note
 
     respond_to do |format|
       if @note.save
@@ -58,6 +60,6 @@ class NotesController < RequireAuthController
   end
 
   def note_params
-    params.require(:note).permit(:title, :body)
+    params.require(:note).permit(:title, :body, :can_show, :can_edit, :can_destroy)
   end
 end

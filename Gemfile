@@ -73,5 +73,6 @@ group :test do
   gem 'webdrivers'
 end
 
+gem 'pundit'
 gem 'reek', require: false
 gem 'rubocop-rails', require: false

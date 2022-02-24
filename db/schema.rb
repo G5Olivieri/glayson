@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_23_210400) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_24_204711) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,6 +56,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_210400) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", default: 1, null: false
+    t.boolean "can_show", default: true
+    t.boolean "can_edit", default: true
+    t.boolean "can_destroy", default: true
+    t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -63,6 +68,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_210400) do
     t.boolean "done"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", default: 1, null: false
+    t.boolean "can_show", default: true
+    t.boolean "can_edit", default: true
+    t.boolean "can_destroy", default: true
+    t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -72,6 +82,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_210400) do
     t.datetime "datetime"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", default: 1, null: false
+    t.boolean "can_show", default: true
+    t.boolean "can_edit", default: true
+    t.boolean "can_destroy", default: true
+    t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -79,9 +94,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_210400) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "admin", default: false
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "notes", "users"
+  add_foreign_key "tasks", "users"
+  add_foreign_key "transactions", "users"
 end

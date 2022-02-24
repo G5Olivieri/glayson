@@ -18,6 +18,8 @@
     <%= form.text_field :description, class: 'app__form__text' %>
   </div>
 
+  <%= render 'shared/authorization_form', form: form %>
+
   <div class="app__form__control app__form__text">
     <%= form.submit class: 'app__form__submit' %>
   </div>

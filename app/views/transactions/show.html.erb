@@ -4,9 +4,13 @@
 <p><%= @transaction.description %></p>
 
 <nav>
+<% if policy(@transaction).update? %>
   <%= link_to 'Edit', edit_transaction_path(@transaction) %>
+<% end %>
+<% if policy(@transaction).destroy? %>
   <%= link_to 'Destroy', @transaction, data: {
     turbo_method: :delete,
     turbo_confirm: "Are you sure?"
   } %>
+<% end %>
 </nav>

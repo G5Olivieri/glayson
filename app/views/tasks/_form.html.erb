@@ -18,6 +18,9 @@
     <%= form.label :done %>
     <%= form.check_box :done, class: 'app__form__checkbox' %>
   </div>
+
+  <%= render 'shared/authorization_form', form: form %>
+
   <div class="app__form__control">
     <%= form.submit class: 'app__form__submit' %>
   </div>

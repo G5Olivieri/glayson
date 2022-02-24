@@ -4,7 +4,7 @@ class TransactionsController < RequireAuthController
   before_action :set_transaction, only: %i[show edit update destroy]
 
   def index
-    @transactions = Transaction.all
+    @transactions = Transaction.where(user: current_user).or(Transaction.where(can_show: true))
   end
 
   def show; end
@@ -16,7 +16,9 @@ class TransactionsController < RequireAuthController
   def edit; end
 
   def create
-    @transaction = Note.new(transaction_params)
+    @transaction = Transaction.new(transaction_params)
+
+    authorize @transaction
 
     respond_to do |format|
       if @transaction.save
@@ -58,6 +60,6 @@ class TransactionsController < RequireAuthController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:name, :description, :amount, :datetime)
+    params.require(:transaction).permit(:name, :description, :amount, :datetime, :can_show, :can_edit, :can_destroy)
   end
 end
