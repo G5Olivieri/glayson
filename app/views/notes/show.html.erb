@@ -3,10 +3,10 @@
 
 <nav>
 <% if policy(@note).update? %>
-  <%= link_to 'Edit', edit_note_path(@note) %>
+  <%= link_to t('edit'), edit_note_path(@note) %>
 <% end %>
 <% if policy(@note).destroy? %>
-  <%= link_to 'Destroy', @note, data: {
+  <%= link_to t('destroy'), @note, data: {
     turbo_method: :delete,
     turbo_confirm: "Are you sure?"
   } %>

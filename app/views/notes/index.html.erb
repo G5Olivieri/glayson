@@ -1,7 +1,7 @@
-<h1>Note</h1>
+<h1><%= Note.model_name.human({count: 2}) %></h1>
 
 <nav>
-  <%= link_to "New note", new_note_path %>
+  <%= link_to t('new_model', model: Note.model_name.human), new_note_path %>
 </nav>
 
 <ul>

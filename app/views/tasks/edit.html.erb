@@ -1,3 +1,3 @@
-<h1>Edit Task</h1>
+<h1><%= t('edit_model',  model: Task.model_name.human) %></h1>
 
 <%= render "form", task: @task %>

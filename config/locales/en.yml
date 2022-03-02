@@ -30,4 +30,31 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  edit: 'edit'
+  show: 'show'
+  destroy: 'destroy'
+  done: 'done'
+  edit_model: 'edit %{model}'
+  new_model: 'new %{model}'
+  logged_as: 'Logged in as %{username}'
+  'Permissions of the other users': 'Permissão dos outros usuários'
+  done_tasks: 'done tasks'
+  todo_tasks: 'todo tasks'
+  activerecord:
+    models:
+      transaction:
+        one: Transaction
+        other: Transactions
+      task:
+        one: Task
+        other: Tasks
+      note:
+        one: Note
+        other: Notes
+  date:
+    name: 'data'
+    formats:
+      default: "%Y-%m-%d"
+      short: "%b %d"
+      long: "%B %d, %Y"
+

@@ -1,13 +1,13 @@
-<h1>Transactions</h1>
+<h1><%= Transaction.model_name.human({count: 2}) %></h1>
 
 <nav>
-  <%= link_to "New transaction", new_transaction_path %>
+  <%= link_to t("new_model", model: Transaction.model_name.human), new_transaction_path(locale: I18n.locale) %>
 </nav>
 
 <ul>
   <% @transactions.group_by {|t| t.datetime.to_date }.each_entry do |transaction_by_date| %>
   <li>
-    <span>Date: <%= transaction_by_date[0] %></span>
+    <span><%= t('date.name') %>: <%= transaction_by_date[0].strftime(t('date.formats.default')) %></span>
     <ul>
       <% transaction_by_date[1].each do |transaction| %>
         <li>

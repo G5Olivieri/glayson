@@ -1,12 +1,13 @@
+<h2><%= t('Permissions of the other users') %></h2>
 <div class="app__form__control">
-  <%= form.label :can_show %>
+  <%= form.label :can_show, t('show') %>
   <%= form.check_box :can_show, class: 'app__form__checkbox' %>
 </div>
 <div class="app__form__control">
-  <%= form.label :can_edit %>
+  <%= form.label :can_edit, t('edit') %>
   <%= form.check_box :can_edit, class: 'app__form__checkbox' %>
 </div>
 <div class="app__form__control">
-  <%= form.label :can_destroy %>
+  <%= form.label :can_destroy, t('destroy') %>
   <%= form.check_box :can_destroy, class: 'app__form__checkbox' %>
 </div>

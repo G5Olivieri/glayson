@@ -1,12 +1,12 @@
-<h1>Name: <%= @task.name %></h1>
-<h1>Done: <%= @task.done %></h1>
+<h1><%= Task.human_attribute_name(:name) %>: <%= @task.name %></h1>
+<h1><%= Task.human_attribute_name(:done) %>: <%= @task.done %></h1>
 
 <nav>
 <% if policy(@task).update? %>
-  <%= link_to 'Edit', edit_task_path(@task) %>
+  <%= link_to t('edit'), edit_task_path(@task) %>
 <% end %>
 <% if policy(@task).destroy? %>
-  <%= link_to 'Destroy', @task, data: {
+  <%= link_to t('destroy'), @task, data: {
     turbo_method: :delete,
     turbo_confirm: "Are you sure?"
   } %>

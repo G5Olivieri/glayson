@@ -1,0 +1,46 @@
+pt:
+  edit: 'editar'
+  show: 'visualizar'
+  destroy: 'deletar'
+  done: 'feito'
+  edit_model: 'editar %{model}'
+  new_model: 'novo(a) %{model}'
+  logged_as: 'Logado como %{username}'
+  'Permissions of the other users': 'Permissão dos outros usuários'
+  done_tasks: 'tarefas feitas'
+  todo_tasks: 'tarefas a fazer'
+  activerecord:
+    models:
+      transaction:
+        one: Transação
+        other: Transações
+      task:
+        one: Tarefa
+        other: Tarefas
+      note:
+        one: Anotação
+        other: Anotações
+    attributes:
+      task:
+        name: 'nome'
+        done: 'feito'
+      transactions:
+        name: 'nome'
+        amount: 'valor'
+        date: 'data'
+        description: 'descrição'
+      note:
+        title: 'título'
+        body: 'corpo'
+  helpers:
+    submit:
+      create: "Criar um(a) %{model}"
+      update: "Confirmar mudanças para %{model}"
+
+  date:
+    name: 'data'
+    formats:
+      default: "%d/%m/%Y"
+      short: "%b %d"
+      long: "%B %d, %Y"
+
