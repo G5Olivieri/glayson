@@ -3,6 +3,9 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
   helper_method :current_user
+  protect_from_forgery with: :null_session,
+    if: Proc.new { |c| c.request.format =~ %r{application/json} }
+
 
   around_action :switch_locale
 

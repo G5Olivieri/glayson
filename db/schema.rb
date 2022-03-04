@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_24_204711) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_04_161552) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -63,6 +63,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_24_204711) do
     t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
+  create_table "recurrings", force: :cascade do |t|
+    t.date "start_date"
+    t.integer "limit"
+    t.integer "days", default: [], array: true
+    t.bigint "transaction_promise_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["transaction_promise_id"], name: "index_recurrings_on_transaction_promise_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.string "name"
     t.boolean "done"
@@ -73,6 +83,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_24_204711) do
     t.boolean "can_edit", default: true
     t.boolean "can_destroy", default: true
     t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
+  create_table "transaction_promises", force: :cascade do |t|
+    t.string "name"
+    t.integer "amount"
+    t.string "transaction_type"
+    t.date "date"
+    t.bigint "transaction_promise_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["transaction_promise_id"], name: "index_transaction_promises_on_transaction_promise_id"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -86,6 +107,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_24_204711) do
     t.boolean "can_show", default: true
     t.boolean "can_edit", default: true
     t.boolean "can_destroy", default: true
+    t.string "transaction_type", default: "expense", null: false
+    t.bigint "transaction_promise_id"
+    t.index ["transaction_promise_id"], name: "index_transactions_on_transaction_promise_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
@@ -101,6 +125,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_24_204711) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "notes", "users"
+  add_foreign_key "recurrings", "transaction_promises"
   add_foreign_key "tasks", "users"
+  add_foreign_key "transaction_promises", "transaction_promises"
+  add_foreign_key "transactions", "transaction_promises"
   add_foreign_key "transactions", "users"
 end

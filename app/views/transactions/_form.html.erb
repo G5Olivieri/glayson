@@ -14,8 +14,18 @@
   </div>
 
   <div class="app__form__control app__form__control__text">
+    <%= form.label :transaction_type %>
+    <%= form.select :transaction_type, ['expense', 'income'], {}, {class: 'app__form__text'} %>
+  </div>
+
+  <div class="app__form__control app__form__control__text">
     <%= form.label :description %>
     <%= form.text_field :description, class: 'app__form__text' %>
+  </div>
+
+  <div class="app__form__control app__form__control__text">
+    <%= form.label :transaction_promise_id %>
+    <%= form.number_field :transaction_promise_id, class: 'app__form__text' %>
   </div>
 
   <%= render 'shared/authorization_form', form: form %>

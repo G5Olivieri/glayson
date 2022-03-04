@@ -13,6 +13,11 @@ Rails.application.routes.draw do
   get 'logout', to: 'sessions#destroy', as: 'logout'
 
   resources :notes
+  namespace :transactions, as: 'transaction' do
+    resources :promises
+  end
+
+
   resources :transactions
 
   namespace :tasks do

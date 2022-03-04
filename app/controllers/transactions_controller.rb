@@ -4,7 +4,9 @@ class TransactionsController < RequireAuthController
   before_action :set_transaction, only: %i[show edit update destroy]
 
   def index
-    @transactions = Transaction.where(user: current_user).or(Transaction.where(can_show: true))
+    @transactions = Transaction.where(user: current_user)
+      .or(Transaction.where(can_show: true))
+      .order(datetime: :desc)
   end
 
   def show; end
@@ -60,6 +62,6 @@ class TransactionsController < RequireAuthController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:name, :description, :amount, :datetime, :can_show, :can_edit, :can_destroy)
+    params.require(:transaction).permit(:name, :description, :amount, :datetime, :transaction_promise_id, :transaction_type, :can_show, :can_edit, :can_destroy)
   end
 end

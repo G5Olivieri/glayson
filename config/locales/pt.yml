@@ -20,6 +20,12 @@ pt:
       note:
         one: Anotação
         other: Anotações
+      transaction_promise:
+        one: Promessa de Transação
+        other: Promessas de Transação
+      recurring:
+        one: Recorrência
+        other: Recorrência
     attributes:
       task:
         name: 'nome'
@@ -29,9 +35,23 @@ pt:
         amount: 'valor'
         date: 'data'
         description: 'descrição'
+        transaction_promise_id: 'referência para promessa'
       note:
         title: 'título'
         body: 'corpo'
+      transaction_promise:
+        id: 'ID'
+        name: 'nome'
+        amount: 'valor'
+        date: 'data'
+        transaction_type: 'tipo'
+        transaction_promise: 'promessa de transação'
+        transaction_promise_id: 'referência para promessa'
+      recurring:
+        start_date: 'data de início'
+        limit: 'limite'
+        days: 'dias'
+
   helpers:
     submit:
       create: "Criar um(a) %{model}"

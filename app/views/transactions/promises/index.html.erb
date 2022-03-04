@@ -1,0 +1,34 @@
+<h1><%= TransactionPromise.model_name.human({count: 2}) %></h1>
+
+<nav>
+  <ul>
+    <li><%= link_to t("new_model", model: TransactionPromise.model_name.human), new_transaction_promise_path %></li>
+  </ul>
+</nav>
+
+<ul>
+  <% @promises.each do |promise| %>
+    <li>
+      <p>
+        <span><%= TransactionPromise.human_attribute_name(:id) %></span>:
+        <%= link_to promise.id, promise %>
+      </p>
+      <p>
+        <span><%= TransactionPromise.human_attribute_name(:name) %></span>:
+        <%= promise.name %>
+      </p>
+      <p>
+        <span><%= TransactionPromise.human_attribute_name(:amount) %></span>:
+        <%= number_to_currency(promise.amount / 100, unit: 'R$', separator: ',', delimite: '.') %>
+      </p>
+      <p>
+        <span><%= TransactionPromise.human_attribute_name(:date) %></span>:
+        <%= promise.date.strftime(t('date.formats.default')) %>
+      </p>
+      <p>
+        <span><%= TransactionPromise.human_attribute_name(:transaction_type) %></span>:
+        <%= promise.transaction_type %>
+      </p>
+    </li>
+  <% end %>
+</ul>

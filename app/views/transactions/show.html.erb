@@ -1,7 +1,11 @@
 <h1><%= @transaction.name %></h1>
 <p><%= number_to_currency(@transaction.amount / 100.00, unit: 'R$', separator: ',', delimiter: '.') %></p>
-<p><%= @transaction.datetime.to_date %></p>
+<p><%= @transaction.datetime.to_date.strftime(t('date.formats.default')) %></p>
+<p><%= @transaction.transaction_type %></p>
 <p><%= @transaction.description %></p>
+<% if @transaction.transaction_promise_id %>
+  <p><%= link_to @transaction.transaction_promise_id, @transaction.transaction_promise %></p>
+<% end %>
 
 <nav>
 <% if policy(@transaction).update? %>

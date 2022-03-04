@@ -6,4 +6,5 @@ class Transaction < ApplicationRecord
   validates :datetime, presence: true
 
   belongs_to :user
+  belongs_to :transaction_promise
 end

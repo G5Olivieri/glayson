@@ -1,7 +1,10 @@
 <h1><%= Transaction.model_name.human({count: 2}) %></h1>
 
 <nav>
-  <%= link_to t("new_model", model: Transaction.model_name.human), new_transaction_path(locale: I18n.locale) %>
+  <ul>
+    <li><%= link_to t("new_model", model: Transaction.model_name.human), new_transaction_path %></li>
+    <li><%= link_to TransactionPromise.model_name.human({count: 2}), transaction_promises_path %></li>
+  </ul>
 </nav>
 
 <ul>

@@ -1,0 +1,56 @@
+<%= form_with scope: :promise, model: promise, class: 'app__form' do |form| %>
+  <% if promise.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(promise.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+        <% promise.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="app__form__control app__form__control__text">
+    <%= form.label :name %>
+    <%= form.text_field :name, autofocus: 'autofocus', class: 'app__form__text' %>
+  </div>
+  <div class="app__form__control app__form__control__text">
+    <%= form.label :amount %>
+    <%= form.number_field :amount, class: 'app__form__text' %>
+  </div>
+
+  <div class="app__form__control app__form__control__text">
+    <%= form.label :date %>
+    <%= form.date_field :date, class: 'app__form__text' %>
+  </div>
+
+  <div class="app__form__control app__form__control__text">
+    <%= form.label :transaction_type %>
+    <%= form.select :transaction_type, ['expense', 'income'], {}, {class: 'app__form__text'} %>
+  </div>
+
+  <div class="app__form__control app__form__control__text">
+    <%= form.label :transaction_promise_id %>
+    <%= form.number_field :transaction_promise_id, class: 'app__form__text' %>
+  </div>
+
+  <h2><%= Recurring.model_name.human %></h2>
+  <%= form.fields_for :recurring, model: promise.recurring do |recurring_form| %>
+    <div class="app__form__control app__form__control__text">
+      <%= recurring_form.label :start_date %>
+      <%= recurring_form.date_field :start_date, class: 'app__form__text' %>
+    </div>
+    <div class="app__form__control app__form__control__text">
+      <%= recurring_form.label :limit %>
+      <%= recurring_form.number_field :limit, class: 'app__form__text' %>
+    </div>
+    <div class="app__form__control app__form__control__text">
+      <%= recurring_form.label :days %>
+      <%= recurring_form.text_field :days, class: 'app__form__text', value: promise.recurring.days.join(',') %>
+    </div>
+  <% end %>
+
+  <div class="app__form__control app__form__text">
+    <%= form.submit class: 'app__form__submit' %>
+  </div>
+<% end %>

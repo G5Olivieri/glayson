@@ -1,0 +1,49 @@
+<h1>
+  <span><%= TransactionPromise.human_attribute_name(:id) %></span>:
+  <%= @promise.id %>
+</h1>
+<p>
+  <span><%= TransactionPromise.human_attribute_name(:name) %></span>:
+  <%= @promise.name %>
+</p>
+<p>
+  <span><%= TransactionPromise.human_attribute_name(:amount) %></span>:
+  <%= number_to_currency(@promise.amount / 100.00, unit: 'R$', separator: ',', delimite: '.') %>
+</p>
+<p>
+  <span><%= TransactionPromise.human_attribute_name(:date) %></span>:
+  <%= @promise.date.strftime(t('date.formats.default')) %>
+</p>
+<p>
+  <span><%= TransactionPromise.human_attribute_name(:transaction_type) %></span>:
+  <%= @promise.transaction_type %>
+</p>
+<% if @promise.transaction_promise %>
+<p>
+  <span><%= TransactionPromise.human_attribute_name(:transaction_promise_id) %></span>:
+  <p><%= link_to @promise.transaction_promise_id, @promise.transaction_promise %></p>
+</p>
+<% end %>
+<% if @promise.recurring %>
+  <h2><%= Recurring.model_name.human %></h2>
+  <p>
+    <span><%= Recurring.human_attribute_name(:start_date) %></span>:
+    <%= @promise.recurring.start_date.strftime(t('date.formats.default')) %>
+  </p>
+  <p>
+    <span><%= Recurring.human_attribute_name(:limit) %></span>:
+    <%= @promise.recurring.limit %>
+  </p>
+  <p>
+    <span><%= Recurring.human_attribute_name(:days) %></span>:
+    <%= @promise.recurring.days.join(', ') %>
+  </p>
+<% end %>
+
+<nav>
+<%= link_to t('edit'), edit_transaction_promise_path(@promise) %>
+  <%= link_to t('destroy'), @promise, data: {
+    turbo_method: :delete,
+    turbo_confirm: "Are you sure?"
+  } %>
+</nav>
