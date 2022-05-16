@@ -4,7 +4,10 @@ const getConnection = () => {
   const connectionString = process.env.DATABASE_URL;
   if (connectionString) {
     return new Client({
-      connectionString
+      connectionString,
+      ssl: {
+        rejectUnauthorized: false,
+      }
     });
   }
   return new Client();
