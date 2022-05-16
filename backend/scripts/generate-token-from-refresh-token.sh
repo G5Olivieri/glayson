@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+access_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTEyNjE4NDQsImV4cCI6MTY1MTI2MzY0NCwic3ViIjoiMjZhZDdkNTAtMDlkZi00NWI5LTg3OGUtNjk5NTdhZDZlNjA3In0.fy7ZYhrHlpG7T6CJa78vgwQpeQQMRrScBZX5beDeOMI"
+refresh_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTEyNjE4NDQsImV4cCI6MTY1MTM0ODI0NCwic3ViIjoiTEY3NEZzR0plWFdhSjRKNjBUNVBPX3U5OGtaV2Z1SnNyLUNxbk51MkxNVSJ9.MJF8e-PLuecb0RIRdBEF0mRyqlI6LSqsDlQskFuR8b0"
+
+curl http://localhost:3001/auth/token \
+  -X POST \
+  -d "grant_type=refresh_token&access_token=$access_token&refresh_token=$refresh_token"
