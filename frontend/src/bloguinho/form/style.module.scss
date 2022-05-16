@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #566587;
+
+  textarea {
+    color: white;
+    border: none;
+    background: inherit;
+    resize: none;
+    height: 100px;
+    font-size: 1.5rem;
+
+    padding: 5px;
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  button {
+    background: rgb(33 36 76);
+    color: #5669b3;
+    border: none;
+    border-top: 1px solid #566587;
+    font-size: 1.5rem;
+    height: 40px;
+  }
+}

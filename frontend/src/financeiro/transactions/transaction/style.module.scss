@@ -1,0 +1,38 @@
+.container {
+  border: 1px solid black;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+    "name amount"
+    "date pay";
+
+  background: #ebc8b2;
+  color: #49403a;
+
+  &.paid {
+    background-color: #49403a;
+    color: #c3b89e;
+  }
+
+  .name {
+    grid-area: name;
+    font-size: 1.5rem;
+  }
+
+  .date {
+    grid-area: date;
+  }
+
+  .amount {
+    grid-area: amount;
+    justify-self: end;
+    align-self: center;
+  }
+
+  .pay {
+    grid-area: pay;
+    justify-self: end;
+    height: 30px;
+    width: 100%;
+  }
+}

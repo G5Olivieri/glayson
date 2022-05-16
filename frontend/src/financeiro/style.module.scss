@@ -1,0 +1,21 @@
+.container {
+  padding: 10px;
+  min-height: 100vh;
+  background-color: #fcf6f2;
+
+  h1 {
+    text-align: center;
+    color: #545454;
+    border: 1px solid black;
+  }
+
+  .new {
+    display: block;
+    color: black;
+    text-decoration: none;
+    background-color: #deb887;
+    font-size: 2rem;
+    text-align: center;
+    border: 1px solid black;
+  }
+}
