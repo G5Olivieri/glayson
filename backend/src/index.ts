@@ -1,4 +1,7 @@
-import 'module-alias/register';
+if (process.env.NODE_ENV !== 'development') {
+  require('module-alias/register');
+}
+
 import { router as authRouter } from '@app/auth/routes';
 import { router as bloguinhoRouter } from '@app/bloguinho/routes';
 import { Context } from '@app/context';

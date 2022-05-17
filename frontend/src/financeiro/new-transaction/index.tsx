@@ -1,5 +1,6 @@
 import { PriceInput } from '@app/financeiro/price-input';
 import { useAuth } from '@app/login/use-auth';
+import { useProvideAuthService } from '@app/login/use-provide-auth-service';
 import { format } from 'date-fns';
 import React, { FormEvent, KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +35,7 @@ export const NewTransaction: React.FC = () => {
       })
     }).then((res) => {
       if (res.ok) {
-        navigate('/financeiro')
+        window.history.back()
       }
     })
   }

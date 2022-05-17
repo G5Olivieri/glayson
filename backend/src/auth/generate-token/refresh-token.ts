@@ -29,7 +29,10 @@ export const generateTokenToRefreshToken = async (req: Request, res: Response, e
   hmacOldToken.update(req.body.access_token);
   const hmacOldAccessToken = hmacOldToken.digest('base64url');
 
-  if (!crypto.timingSafeEqual(Buffer.from((refreshTokenPayload.sub as unknown) as string), Buffer.from(hmacOldAccessToken))) {
+  const oldHmacTokenBuffer = Buffer.from(hmacOldAccessToken);
+  const subRefreshTokenBuffer = Buffer.from((refreshTokenPayload.sub as unknown) as string);
+
+  if (oldHmacTokenBuffer.length !== subRefreshTokenBuffer.length || !crypto.timingSafeEqual(oldHmacTokenBuffer, subRefreshTokenBuffer)) {
     return res.status(401).end();
   }
 
@@ -39,7 +42,7 @@ export const generateTokenToRefreshToken = async (req: Request, res: Response, e
   });
   const hmac = crypto.createHmac('sha256', process.env.JWT_SECRET!);
   hmac.update(access_token);
-  const hmacAccessToken = hmacOldToken.digest('base64url');
+  const hmacAccessToken = hmac.digest('base64url');
 
   const refresh_token = await jwt.sign({}, process.env.JWT_SECRET!, {
     subject: hmacAccessToken,

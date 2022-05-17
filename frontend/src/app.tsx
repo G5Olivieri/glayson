@@ -10,6 +10,7 @@ import { useAuth } from '@app/login/use-auth'
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { useRegisterSW } from 'virtual:pwa-register/react'
 
 const RequiredAuth = ({ children }: { children: JSX.Element }): JSX.Element => {
   const auth = useAuth()
@@ -19,6 +20,8 @@ const RequiredAuth = ({ children }: { children: JSX.Element }): JSX.Element => {
 }
 
 export const App: React.FC = () => {
+  useRegisterSW()
+
   return (
     <AuthProvider>
       <I18nextProvider i18n={i18n}>
@@ -41,20 +44,15 @@ export const App: React.FC = () => {
             } />
             <Route path="financeiro" element={
               <RequiredAuth>
-                <Navigate to="/financeiro/transactions" />
-              </RequiredAuth>
-            } />
-            <Route path="financeiro/transactions" element={
-              <RequiredAuth>
                 <Financeiro />
               </RequiredAuth>
             } />
-            <Route path="financeiro/transactions/new" element={
+            <Route path="financeiro/new" element={
               <RequiredAuth>
                 <NewTransaction />
               </RequiredAuth>
             } />
-            <Route path="financeiro/transactions/:id" element={
+            <Route path="financeiro/:id" element={
               <RequiredAuth>
                 <UpdateTransaction />
               </RequiredAuth>

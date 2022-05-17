@@ -25,7 +25,7 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, pay }) =>
         return
       }
     }
-    navigate(`/financeiro/transactions/${id}`)
+    navigate(`/financeiro/${id}`)
   }
 
   return (
@@ -33,7 +33,7 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, pay }) =>
       <p className={style.name}>{name}</p>
       <p className={style.date}>{format(new Date(date), 'dd/MM/yyyy')}</p>
       <p className={style.amount}>{formatPrice(amount.toString(), ',', '.')}</p>
-      {!paid && <button type="button" ref={buttonRef} className={style.pay} >{t('to pay')}</button> }
+      {!paid && <button type="button" ref={buttonRef} className={style.pay} >{t('pay')}</button> }
     </div>
   )
 }

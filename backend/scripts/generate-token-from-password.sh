@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-username="Glayson"
+username="glayson"
 password="Murollo@1"
 
-curl http://localhost:3001/auth/token \
+curl http://localhost:3001/api/auth/token \
   -X POST \
-  -d "grant_type=password&access_token=$username&refresh_token=$password"
+  -d "grant_type=password&username=$username&password=$password"

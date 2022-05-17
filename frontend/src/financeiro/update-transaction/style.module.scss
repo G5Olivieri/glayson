@@ -19,9 +19,14 @@
       gap: 10px;
     }
 
+    button[disabled] {
+      background-color: gray;
+    }
+
     input[type="checkbox"] {
       width: 30px;
     }
+
     .update {
       color: white;
       background-color: green;

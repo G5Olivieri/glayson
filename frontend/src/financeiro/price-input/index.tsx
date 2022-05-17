@@ -5,9 +5,10 @@ type PriceInputProps = {
   onChange: (priceInCents: number) => void
   value: number
   required?: boolean
+  disabled?: boolean
 }
 
-export const PriceInput: React.FC<PriceInputProps> = ({ value, onChange, required }) => {
+export const PriceInput: React.FC<PriceInputProps> = ({ value, onChange, required, disabled }) => {
   const [oldValue, setOldValue] = useState(formatPrice(value.toString(), ',', '.'))
 
   const backspaceKeyUp = () => {
@@ -48,6 +49,6 @@ export const PriceInput: React.FC<PriceInputProps> = ({ value, onChange, require
   }
 
   return (
-    <input inputMode='numeric' required={required} onInput={onInput} value={formatPrice(value.toString(), ',', '.')} />
+    <input inputMode='numeric' disabled={disabled} required={required} onInput={onInput} value={formatPrice(value.toString(), ',', '.')} />
   )
 }
