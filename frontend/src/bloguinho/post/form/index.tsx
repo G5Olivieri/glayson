@@ -19,7 +19,7 @@ export default function CommentForm({ onNewComment }: CommentFormProps) {
         setText("");
       }}
     >
-      <input
+      <textarea
         placeholder={t("commentary")}
         onChange={(event) => setText(event.target.value)}
         value={text}

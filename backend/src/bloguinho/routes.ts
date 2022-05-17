@@ -130,7 +130,8 @@ router.post('/posts/:id/comments', authorize, handlePromiseExpress(async (req, r
   const queryResult = await db.query('INSERT INTO post_comments(text, post_id, author_id) VALUES($1, $2, $3) RETURNING id, text, created_at', [req.body.text, req.params.id, account.id]);
 
   return res.send({
-    ...queryResult.rows[0]
+    ...queryResult.rows[0],
+    username: account.username
   }).end();
 }));
 
