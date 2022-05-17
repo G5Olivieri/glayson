@@ -19,10 +19,9 @@ export default defineConfig({
         "robots.txt",
         "apple-touch-icon.png",
       ],
-      strategies: "generateSW",
-      workbox: {
-        sourcemap: true,
-      },
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.ts",
       manifest: {
         name: "glayson",
         short_name: "glayson",

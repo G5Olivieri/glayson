@@ -16,6 +16,9 @@ services:
       PGPASSWORD: dev
       PGDATABASE: postgres
       PGPORT: 5432
+      VAPID_PRIVATE_KEY: dBMDY6HXmidQ2icjp06X_OuOOSoBkdGXvOq7rUeTIQo
+      VAPID_PUBLIC_KEY: BD9G7lE3f2OTf-8qRXWULCWxpJQhA_-qtbqosH9F27sGyxGRbcwvW-DciQu9YKaCn568ZuYGK-VS5HuGGEbd5Yo
+      HOST: http://localhost:3001
     volumes:
       - .:/app
     ports:
