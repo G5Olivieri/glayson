@@ -21,7 +21,7 @@ export default function Post({ post, onDelete }: PostProps) {
   return (
     <div className={style.container}>
       <header className={style.header}>
-        {format(parseISO(post.created_at), "dd-MMM")}
+        {post.username} - {format(parseISO(post.created_at), "dd/MMM")}
       </header>
       <main className={style.main}>{post.text}</main>
       <footer className={style.footer}>

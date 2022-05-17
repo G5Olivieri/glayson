@@ -15,7 +15,7 @@ export default function Comment({ comment, onDelete }: CommentProps) {
   return (
     <div className={style.container}>
       <header className={style.header}>
-        {format(parseISO(comment.created_at), "dd-MMM")}
+        {comment.username} - {format(parseISO(comment.created_at), "dd/MMM")}
       </header>
       <main className={style.main}>{comment.text}</main>
       <footer className={style.footer}>
