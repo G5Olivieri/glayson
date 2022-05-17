@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import style from "./style.module.scss";
 
-type PostFormProps = {
-  onNewPost(text: string): void;
+type CommentFormProps = {
+  onNewComment(text: string): void;
 };
 
-export default function PostForm({ onNewPost }: PostFormProps) {
+export default function CommentForm({ onNewComment }: CommentFormProps) {
   const { t } = useTranslation();
   const [text, setText] = useState("");
 
@@ -15,15 +15,16 @@ export default function PostForm({ onNewPost }: PostFormProps) {
       className={style.container}
       onSubmit={(event) => {
         event.preventDefault();
-        onNewPost(text);
+        onNewComment(text);
         setText("");
       }}
     >
-      <textarea
+      <input
+        placeholder={t("commentary")}
         onChange={(event) => setText(event.target.value)}
         value={text}
       />
-      <button type="submit">{t("submit")}</button>
+      <button type="submit">{t("comment")}</button>
     </form>
   );
 }

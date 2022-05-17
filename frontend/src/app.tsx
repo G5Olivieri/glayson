@@ -1,4 +1,5 @@
 import Bloguinho from "@app/bloguinho";
+import Post from "@app/bloguinho/post";
 import Financeiro from "@app/financeiro";
 import NewTransaction from "@app/financeiro/new-transaction";
 import UpdateTransaction from "@app/financeiro/update-transaction";
@@ -48,6 +49,14 @@ export default function App() {
               element={
                 <RequiredAuth>
                   <Bloguinho />
+                </RequiredAuth>
+              }
+            />
+            <Route
+              path="bloguinho/posts/:id"
+              element={
+                <RequiredAuth>
+                  <Post />
                 </RequiredAuth>
               }
             />

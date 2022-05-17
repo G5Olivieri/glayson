@@ -1,0 +1,28 @@
+.container {
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: #566587;
+  padding: 5px;
+
+  .main {
+    color: #7799b9;
+  }
+
+  .header {
+    margin-bottom: 10px;
+    color: #5e74a7;
+  }
+
+  .footer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: end;
+
+    button {
+      background: rgb(33 36 76);
+      color: #5669b3;
+      border: 1px solid #566587;
+      padding: 4px;
+    }
+  }
+}

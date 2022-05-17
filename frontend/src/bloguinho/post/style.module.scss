@@ -1,0 +1,25 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  max-width: 520px;
+  flex-direction: column;
+  font-size: 1rem;
+  padding: 10px;
+  background-color: #1e253c;
+
+  .post {
+    border-width: 1px 1px 1px 1px;
+    border-style: solid;
+    border-color: #566587;
+    padding: 5px;
+
+    .main {
+      color: #7799b9;
+    }
+
+    .header {
+      margin-bottom: 10px;
+      color: #5e74a7;
+    }
+  }
+}

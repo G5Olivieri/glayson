@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node -r tsconfig-paths/register -r ts-node/register src/index.ts",
     "start:dev": "nodemon -w src -e 'ts' -x 'node -r tsconfig-paths/register -r ts-node/register --inspect=0.0.0.0:9229 src/index.ts'",
-    "build": "tsc --project ."
+    "build": "tsc --project .",
+    "lint": "eslint --ext .ts ."
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
