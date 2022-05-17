@@ -1,121 +1,134 @@
-import { AuthService } from "@app/login/auth-service"
-import { Credential } from "@app/login/credential"
-import { useEffect, useState } from "react"
+import { AuthService } from "@app/login/auth-service";
+import { Credential } from "@app/login/credential";
+import { useEffect, useState } from "react";
 
 type AccessTokenType = {
-  access_token: string
-  refresh_token: string
-  expires_in: number
-}
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+};
 
-export const useProvideAuthService = (): AuthService => {
+export default function useProvideAuthService(): AuthService {
   const baseUrl = import.meta.env.VITE_BASE_API_URL;
-  const [isLoading, setIsLoading] = useState(true)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [accessToken, setAccessToken] = useState('')
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+
+  const clearToken = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("expired_at");
+    setAccessToken("");
+    setIsAuthenticated(false);
+    setIsLoading(false);
+  };
+
+  const setToken = (
+    newAccessToken: string,
+    refreshToken: string,
+    expiresIn: number
+  ) => {
+    localStorage.setItem("access_token", newAccessToken);
+    localStorage.setItem("refresh_token", refreshToken);
+    localStorage.setItem(
+      "expired_at",
+      (new Date().getTime() + expiresIn * 1000).toString()
+    );
+    setAccessToken(newAccessToken);
+    setIsAuthenticated(true);
+    setIsLoading(false);
+  };
 
   const signin = async (credential: Credential) => {
     const response = await fetch(`${baseUrl}/api/auth/token`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
       body: JSON.stringify({
-        grant_type: 'password',
+        grant_type: "password",
         ...credential,
-      })
-    })
-    const body = await response.json() as AccessTokenType
-    setToken(body.access_token, body.refresh_token, body.expires_in)
-  }
+      }),
+    });
+    const body = (await response.json()) as AccessTokenType;
+    setToken(body.access_token, body.refresh_token, body.expires_in);
+  };
 
   const signout = async () => {
-    const access_token = localStorage.getItem('access_token')
-    if (access_token) {
+    const storagedAccessToken = localStorage.getItem("access_token");
+    if (storagedAccessToken) {
       await fetch(`${baseUrl}/api/auth/token/invalidate`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
-        body: JSON.stringify({ access_token }),
+        body: JSON.stringify({ access_token: storagedAccessToken }),
       });
-      clearToken()
+      clearToken();
     }
-  }
-
-  const clearToken = () => {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
-    localStorage.removeItem('expired_at')
-    setAccessToken('')
-    setIsAuthenticated(false)
-    setIsLoading(false)
-  }
-
-  const setToken = (access_token: string, refresh_token: string, expires_in: number) => {
-    localStorage.setItem('access_token', access_token)
-    localStorage.setItem('refresh_token', refresh_token)
-    localStorage.setItem('expired_at', (new Date().getTime() + (expires_in * 1000)).toString())
-    setAccessToken(access_token)
-    setIsAuthenticated(true)
-    setIsLoading(false)
-  }
+  };
 
   const isExpired = (expiredAt: string): boolean => {
-    const expiredAtInt = parseInt(expiredAt)
-    const now = new Date().getTime()
-    return now > expiredAtInt
-  }
+    const expiredAtInt = parseInt(expiredAt, 10);
+    const now = new Date().getTime();
+    return now > expiredAtInt;
+  };
 
-  const refreshToken = async (access_token: string, refresh_token: string) => {
-    return fetch(`${baseUrl}/api/auth/token`, {
-      method: 'POST',
+  const refreshToken = async (
+    oldAccessToken: string,
+    oldRefreshToken: string
+  ) =>
+    fetch(`${baseUrl}/api/auth/token`, {
+      method: "POST",
       headers: {
-        'content-type': 'application/json'
+        "content-type": "application/json",
       },
       body: JSON.stringify({
-        grant_type: 'refresh_token',
-        access_token,
-        refresh_token,
-      })
-    }).then(res => res.json() as Promise<AccessTokenType>)
-  }
+        grant_type: "refresh_token",
+        access_token: oldAccessToken,
+        refresh_token: oldRefreshToken,
+      }),
+    }).then((res) => res.json() as Promise<AccessTokenType>);
 
   useEffect(() => {
-    const access_token = localStorage.getItem('access_token')
-    const refresh_token = localStorage.getItem('refresh_token')
-    const expired_at = localStorage.getItem('expired_at')
+    const storagedAccessToken = localStorage.getItem("access_token");
+    const storagedRefreshToken = localStorage.getItem("refresh_token");
+    const storagedExpiredAt = localStorage.getItem("expired_at");
 
-    if (!access_token || !refresh_token || !expired_at) {
-      clearToken()
-      return
+    if (!storagedAccessToken || !storagedRefreshToken || !storagedExpiredAt) {
+      clearToken();
+      return;
     }
 
-    if (isExpired(expired_at)) {
-      refreshToken(access_token, refresh_token)
-        .then(response => {
-          setToken(response.access_token, response.refresh_token, response.expires_in)
+    if (isExpired(storagedExpiredAt)) {
+      refreshToken(storagedAccessToken, storagedRefreshToken)
+        .then((response) => {
+          setToken(
+            response.access_token,
+            response.refresh_token,
+            response.expires_in
+          );
         })
-        .catch(() => clearToken())
-      return
+        .catch(() => clearToken());
+      return;
     }
 
     fetch(`${baseUrl}/api/auth/token/check`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
-      body: JSON.stringify({ access_token })
+      body: JSON.stringify({ access_token: storagedAccessToken }),
     }).then((response) => {
       if (response.ok) {
-        setAccessToken(access_token)
-        setIsAuthenticated(true)
-        setIsLoading(false)
-        return
+        setAccessToken(storagedAccessToken);
+        setIsAuthenticated(true);
+        setIsLoading(false);
+        return;
       }
-      clearToken()
-    })
-  }, [])
+      clearToken();
+    });
+  }, []);
 
   return {
     isLoading,
@@ -123,5 +136,5 @@ export const useProvideAuthService = (): AuthService => {
     accessToken,
     signin,
     signout,
-  }
+  };
 }

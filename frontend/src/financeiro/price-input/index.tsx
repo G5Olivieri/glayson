@@ -1,54 +1,74 @@
-import { formatPrice } from '@app/financeiro/format-price'
-import React, { ChangeEvent, ChangeEventHandler, KeyboardEvent, useState, useSyncExternalStore } from 'react'
+import formatPrice from "@app/financeiro/format-price";
+import React, { ChangeEvent, useState } from "react";
 
 type PriceInputProps = {
-  onChange: (priceInCents: number) => void
-  value: number
-  required?: boolean
-  disabled?: boolean
-}
+  onChange: (priceInCents: number) => void;
+  value: number;
+  required?: boolean;
+  disabled?: boolean;
+};
 
-export const PriceInput: React.FC<PriceInputProps> = ({ value, onChange, required, disabled }) => {
-  const [oldValue, setOldValue] = useState(formatPrice(value.toString(), ',', '.'))
+export default function PriceInput({
+  value,
+  onChange,
+  required,
+  disabled,
+}: PriceInputProps) {
+  const [oldValue, setOldValue] = useState(
+    formatPrice(value.toString(), ",", ".")
+  );
 
   const backspaceKeyUp = () => {
     if (value === 0) {
-      return oldValue
+      return oldValue;
     }
 
     if (value < 10) {
-      onChange(0)
-      return formatPrice('0', ',', '.')
+      onChange(0);
+      return formatPrice("0", ",", ".");
     }
 
-    const onlyDigit = value.toString()
-    const newPrice = parseInt(onlyDigit.substring(0, onlyDigit.length - 1))
-    onChange(newPrice)
-    return formatPrice(newPrice.toString(), ',', '.')
-  }
+    const onlyDigit = value.toString();
+    const newPrice = parseInt(onlyDigit.substring(0, onlyDigit.length - 1), 10);
+    onChange(newPrice);
+    return formatPrice(newPrice.toString(), ",", ".");
+  };
 
   const digitKeyUp = (digit: string) => {
-    const onlyDigit = value.toString()
-    const numberPrice = parseInt(onlyDigit) * 10 + parseInt(digit)
-    onChange(numberPrice)
-    return formatPrice(numberPrice.toString(), ',', '.')
-  }
+    const onlyDigit = value.toString();
+    const numberPrice = parseInt(onlyDigit, 10) * 10 + parseInt(digit, 10);
+    onChange(numberPrice);
+    return formatPrice(numberPrice.toString(), ",", ".");
+  };
 
   const onInput = (event: ChangeEvent<HTMLInputElement>) => {
-    const rawValue = event.target.value
+    const rawValue = event.target.value;
     if (rawValue.length < oldValue.length) {
-      setOldValue(backspaceKeyUp())
-      return
+      setOldValue(backspaceKeyUp());
+      return;
     }
-    const digit = rawValue.substring(oldValue.length)
+    const digit = rawValue.substring(oldValue.length);
 
-    if (digit.charCodeAt(0) <= '9'.charCodeAt(0) && digit.charCodeAt(0) >= '0'.charCodeAt(0)) {
-      setOldValue(digitKeyUp(digit))
-      return
+    if (
+      digit.charCodeAt(0) <= "9".charCodeAt(0) &&
+      digit.charCodeAt(0) >= "0".charCodeAt(0)
+    ) {
+      setOldValue(digitKeyUp(digit));
     }
-  }
+  };
 
   return (
-    <input inputMode='numeric' disabled={disabled} required={required} onInput={onInput} value={formatPrice(value.toString(), ',', '.')} />
-  )
+    <input
+      inputMode="numeric"
+      disabled={disabled}
+      required={required}
+      onInput={onInput}
+      value={formatPrice(value.toString(), ",", ".")}
+    />
+  );
 }
+
+PriceInput.defaultProps = {
+  required: false,
+  disabled: false,
+};

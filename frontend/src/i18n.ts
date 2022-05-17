@@ -8,33 +8,33 @@ i18n
     resources: {
       ptBr: {
         translation: {
-          create: 'criar',
-          name: 'nome',
-          date: 'data',
-          new: 'novo',
-          update: 'atualizar',
-          delete: 'deletar',
-          change: 'mudar',
-          logout: 'sair',
-          pay: 'pagar',
-          paid: 'pago',
-          'new transaction': 'nova transação',
-          'update transaction': 'atualizar transação',
-          language: 'idioma',
-          submit: 'enviar',
-        }
-      }
+          create: "criar",
+          name: "nome",
+          date: "data",
+          new: "novo",
+          update: "atualizar",
+          delete: "deletar",
+          change: "mudar",
+          logout: "sair",
+          pay: "pagar",
+          paid: "pago",
+          "new transaction": "nova transação",
+          "update transaction": "atualizar transação",
+          language: "idioma",
+          submit: "enviar",
+        },
+      },
     },
     interpolation: {
-      escapeValue: false // react already safes from xss
-    }
+      escapeValue: false, // react already safes from xss
+    },
   });
 
-const lang = localStorage.getItem('language')
+const lang = localStorage.getItem("language");
 if (lang) {
-  i18n.changeLanguage(lang)
+  i18n.changeLanguage(lang);
 } else {
-  localStorage.setItem('language', 'en')
+  localStorage.setItem("language", "en");
 }
 
 export default i18n;
