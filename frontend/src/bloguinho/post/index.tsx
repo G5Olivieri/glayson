@@ -42,13 +42,14 @@ export default function Post() {
             id: string;
             text: string;
             created_at: string;
+            username: string;
           }>
       )
-      .then(({ id: commentId, text, created_at: createdAt }) =>
+      .then(({ id: commentId, text, created_at: createdAt, username }) =>
         setPost({
           ...post,
           comments: [
-            { id: commentId, text, created_at: createdAt },
+            { id: commentId, text, created_at: createdAt, username },
             ...post.comments,
           ],
         })

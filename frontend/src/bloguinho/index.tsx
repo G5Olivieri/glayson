@@ -25,12 +25,13 @@ export default function Bloguinho() {
             id: string;
             text: string;
             created_at: string;
+            username: string;
           }>
       )
-      .then(({ id, text, created_at: createdAt }) =>
+      .then(({ id, text, created_at: createdAt, username }) =>
         setPosts({
           data: [
-            { id, text, created_at: createdAt, comments: [] },
+            { id, text, created_at: createdAt, comments: [], username },
             ...posts.data,
           ],
         })
