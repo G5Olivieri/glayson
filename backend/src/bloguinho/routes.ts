@@ -40,19 +40,37 @@ router.get('/posts', authorize, handlePromiseExpress(async (req, res) => {
     throw new Error('none account');
   }
 
-  const queryResult = await db.query('SELECT * FROM posts WHERE author_id=$1 ORDER BY created_at DESC', [account.id]);
+  const queryResult = await db.query(`
+SELECT
+  posts.id,
+  posts.text,
+  posts.created_at,
+  accounts.username
+FROM
+  posts
+INNER JOIN
+  accounts
+ON accounts.id=posts.author_id
+ORDER BY created_at DESC;
+`);
   return res.send(queryResult.rows).end();
 }));
 
 router.get('/posts/:id', authorize, handlePromiseExpress(async (req, res) => {
-  const context = Context.get(req);
-  const account = context.account;
-
-  if (!account) {
-    throw new Error('none account');
-  }
-
-  let queryResult = await db.query('SELECT * FROM posts WHERE id=$1 AND author_id=$2', [req.params.id, account.id]);
+  let queryResult = await db.query(`
+SELECT
+  posts.id,
+  posts.text,
+  posts.created_at,
+  accounts.username
+FROM
+  posts
+INNER JOIN
+  accounts
+ON accounts.id=posts.author_id
+WHERE posts.id=$1
+ORDER BY created_at DESC;
+  `, [req.params.id]);
 
   if (queryResult.rowCount === 0) {
     return res.status(404).end();
@@ -60,7 +78,22 @@ router.get('/posts/:id', authorize, handlePromiseExpress(async (req, res) => {
 
   const post = queryResult.rows[0];
 
-  queryResult = await db.query('SELECT * FROM post_comments WHERE post_id=$1 ORDER BY created_at DESC', [req.params.id]);
+  queryResult = await db.query(`
+SELECT
+  post_comments.id,
+  post_comments.text,
+  post_comments.created_at,
+  post_comments.post_id,
+  accounts.username
+FROM
+  post_comments
+INNER JOIN
+  accounts
+ON accounts.id=post_comments.author_id
+WHERE post_comments.post_id=$1
+ORDER BY created_at DESC;
+  `, [req.params.id]);
+
   post.comments = queryResult.rows;
 
   return res.send(post).end();
