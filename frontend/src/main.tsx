@@ -13,4 +13,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 reportWebVitals(console.log);
 
-initSW();
+if (process.env.NODE_ENV !== "development") {
+  initSW();
+}

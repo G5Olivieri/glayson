@@ -40,7 +40,7 @@ async function subscribeUser(reg: ServiceWorkerRegistration) {
 }
 
 function initPushService(reg: ServiceWorkerRegistration) {
-  if (process.env.VITE_DISABLE_PUSH_SERVICE) {
+  if (process.env.VITE_DISABLE_PUSH_SERVICE === "true") {
     return;
   }
 

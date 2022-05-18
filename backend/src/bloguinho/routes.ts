@@ -29,7 +29,8 @@ router.post('/posts', authorize, handlePromiseExpress(async (req, res) => {
   const queryResult = await db.query('INSERT INTO posts(text, author_id) VALUES($1, $2) RETURNING id, text, created_at', [req.body.text, account.id]);
 
   return res.send({
-    ...queryResult.rows[0]
+    ...queryResult.rows[0],
+    username: account.username
   }).end();
 }));
 

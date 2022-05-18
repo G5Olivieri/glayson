@@ -6,6 +6,7 @@ import { handlePromiseExpress } from '@app/handlePromiseExpress';
 import { Static, Type } from '@sinclair/typebox';
 import { Router } from 'express';
 import webPush from 'web-push';
+import { resourceLimits } from 'worker_threads';
 
 const registerSubscriptionSchema = Type.Object({
   subscription: Type.Any(),
@@ -66,16 +67,31 @@ router.post('/register', authorize, handlePromiseExpress(async (req, res) => {
     const subs = queryResult.rows[0];
     const subJson = JSON.stringify(subscription);
     if (subs.subscription === subJson) {
-      res.status(204);
+      res.status(204).end();
       return;
     }
     await db.query('UPDATE subscriptions SET subscription=$2 WHERE id=$1', [queryResult.rows[0].id, JSON.stringify(subscription)]);
-    res.status(204);
+    res.status(204).end();
     return;
   }
 
   await db.query('INSERT INTO subscriptions(device, owner_id, subscription) VALUES($1, $2, $3)', [device, account.id, JSON.stringify(subscription)]);
-  res.status(204);
+  res.status(204).end();
+}));
+
+router.post('/send-notification', handlePromiseExpress(async (req, res) => {
+  const { payload } = req.body;
+  const queryResult = await db.query('SELECT subscription from subscriptions');
+
+  queryResult.rows.forEach(({ subscription }) => {
+    webPush.sendNotification(JSON.parse(subscription), JSON.stringify(payload), { TTL: 60 })
+      .then(() => {
+        res.status(204).end();
+      }).catch((e) => {
+        console.error(e);
+      res.status(500).end();
+      });
+  });
 }));
 
 export { router };
