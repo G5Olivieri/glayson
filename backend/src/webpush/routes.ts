@@ -6,7 +6,6 @@ import { handlePromiseExpress } from '@app/handlePromiseExpress';
 import { Static, Type } from '@sinclair/typebox';
 import { Router } from 'express';
 import webPush from 'web-push';
-import { resourceLimits } from 'worker_threads';
 
 const registerSubscriptionSchema = Type.Object({
   subscription: Type.Any(),
@@ -23,7 +22,7 @@ webPush.setVapidDetails(
 
 const router = Router();
 
-router.get('/vapid-public-key', authorize, (req, res) => {
+router.get('/vapid-public-key', authorize, (_req, res) => {
   res.send(process.env.VAPID_PUBLIC_KEY);
 });
 
@@ -79,7 +78,7 @@ router.post('/register', authorize, handlePromiseExpress(async (req, res) => {
   res.status(204).end();
 }));
 
-router.post('/send-notification', handlePromiseExpress(async (req, res) => {
+router.post('/send-notification', authorize, handlePromiseExpress(async (req, res) => {
   const { payload } = req.body;
   const queryResult = await db.query('SELECT subscription from subscriptions');
 
@@ -89,7 +88,7 @@ router.post('/send-notification', handlePromiseExpress(async (req, res) => {
         res.status(204).end();
       }).catch((e) => {
         console.error(e);
-      res.status(500).end();
+        res.status(500).end();
       });
   });
 }));

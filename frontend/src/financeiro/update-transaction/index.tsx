@@ -36,6 +36,12 @@ export default function UpdateTransaction() {
       });
   }, []);
 
+  const backIfSuccess = (res: Response) => {
+    if (res.ok) {
+      window.history.back();
+    }
+  };
+
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     fetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
@@ -50,11 +56,7 @@ export default function UpdateTransaction() {
         paid,
         amount: parseInt(amount.toString(), 10),
       }),
-    }).then((res) => {
-      if (res.ok) {
-        window.history.back();
-      }
-    });
+    }).then(backIfSuccess);
   };
 
   const onAmountChange = (newPrice: number) => {
@@ -69,11 +71,7 @@ export default function UpdateTransaction() {
         "content-type": "application/json",
         authorization: `Bearer ${auth.accessToken}`,
       },
-    }).then((res) => {
-      if (res.ok) {
-        window.history.back();
-      }
-    });
+    }).then(backIfSuccess);
   };
 
   return (

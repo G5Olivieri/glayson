@@ -27,7 +27,7 @@ export const generateTokenToPassword = async (req: Request, res: Response, expir
       return res.status(401).end();
     }
 
-    const access_token = await jwt.sign({}, process.env.JWT_SECRET!, {
+    const access_token = jwt.sign({}, process.env.JWT_SECRET!, {
       subject: account.id,
       expiresIn: expires_in,
     });
@@ -35,7 +35,7 @@ export const generateTokenToPassword = async (req: Request, res: Response, expir
     hmac.update(access_token);
     const hmacAccessToken = hmac.digest('base64url');
 
-    const refresh_token = await jwt.sign({}, process.env.JWT_SECRET!, {
+    const refresh_token = jwt.sign({}, process.env.JWT_SECRET!, {
       subject: hmacAccessToken,
       expiresIn: '1d'
     });

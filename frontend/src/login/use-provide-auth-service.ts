@@ -25,11 +25,11 @@ export default function useProvideAuthService(): AuthService {
 
   const setToken = (
     newAccessToken: string,
-    refreshToken: string,
+    newRefreshToken: string,
     expiresIn: number
   ) => {
     localStorage.setItem("access_token", newAccessToken);
-    localStorage.setItem("refresh_token", refreshToken);
+    localStorage.setItem("refresh_token", newRefreshToken);
     localStorage.setItem(
       "expired_at",
       (new Date().getTime() + expiresIn * 1000).toString()

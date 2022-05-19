@@ -5,7 +5,7 @@ import NewTransaction from "@app/financeiro/new-transaction";
 import UpdateTransaction from "@app/financeiro/update-transaction";
 import Home from "@app/home";
 import i18n from "@app/i18n";
-import { initSW } from "@app/init-sw";
+import initSW from "@app/init-sw";
 import AuthProvider from "@app/login/auth-provider";
 import Login from "@app/login/login";
 import useAuth from "@app/login/use-auth";
@@ -24,8 +24,10 @@ function RequiredAuth({ children }: { children: JSX.Element }): JSX.Element {
 export default function App() {
   const { updateServiceWorker } = useRegisterSW();
 
-  updateServiceWorker();
-  initSW();
+  if (process.env.NODE_ENV !== "development") {
+    updateServiceWorker();
+    initSW();
+  }
 
   return (
     <AuthProvider>

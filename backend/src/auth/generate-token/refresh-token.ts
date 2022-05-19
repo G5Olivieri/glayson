@@ -3,7 +3,7 @@ import { db } from '@app/db';
 import { Type } from '@sinclair/typebox';
 import crypto from 'crypto';
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const refreshTokenSchema = Type.Object({
   grant_type: Type.Literal('refresh_token'),
@@ -22,29 +22,29 @@ export const generateTokenToRefreshToken = async (req: Request, res: Response, e
     res.status(401).end();
     return;
   }
-  const accessTokenPayload = jwt.verify(req.body.access_token, process.env.JWT_SECRET!, { ignoreExpiration: true });
-  const refreshTokenPayload = jwt.verify(req.body.refresh_token, process.env.JWT_SECRET!);
+  const accessTokenPayload = jwt.verify(req.body.access_token, process.env.JWT_SECRET!, { ignoreExpiration: true }) as JwtPayload;
+  const refreshTokenPayload = jwt.verify(req.body.refresh_token, process.env.JWT_SECRET!) as JwtPayload;
 
   const hmacOldToken = crypto.createHmac('sha256', process.env.JWT_SECRET!);
   hmacOldToken.update(req.body.access_token);
   const hmacOldAccessToken = hmacOldToken.digest('base64url');
 
   const oldHmacTokenBuffer = Buffer.from(hmacOldAccessToken);
-  const subRefreshTokenBuffer = Buffer.from((refreshTokenPayload.sub as unknown) as string);
+  const subRefreshTokenBuffer = Buffer.from(refreshTokenPayload.sub!);
 
   if (oldHmacTokenBuffer.length !== subRefreshTokenBuffer.length || !crypto.timingSafeEqual(oldHmacTokenBuffer, subRefreshTokenBuffer)) {
     return res.status(401).end();
   }
 
-  const access_token = await jwt.sign({}, process.env.JWT_SECRET!, {
-    subject: (accessTokenPayload.sub as unknown as string),
+  const access_token = jwt.sign({}, process.env.JWT_SECRET!, {
+    subject: accessTokenPayload.sub!,
     expiresIn: expires_in,
   });
   const hmac = crypto.createHmac('sha256', process.env.JWT_SECRET!);
   hmac.update(access_token);
   const hmacAccessToken = hmac.digest('base64url');
 
-  const refresh_token = await jwt.sign({}, process.env.JWT_SECRET!, {
+  const refresh_token = jwt.sign({}, process.env.JWT_SECRET!, {
     subject: hmacAccessToken,
     expiresIn: '1d'
   });

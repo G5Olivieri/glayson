@@ -1,18 +1,21 @@
 if (process.env.NODE_ENV !== 'development') {
   require('module-alias/register');
+  require('newrelic');
 }
 
-import { router as authRouter } from '@app/auth/routes';
-import { router as bloguinhoRouter } from '@app/bloguinho/routes';
-import { Context } from '@app/context';
-import { db } from '@app/db';
-import { router as financeiroRouter } from '@app/financeiro/routes';
-import { router as webpushRouter } from '@app/webpush/routes';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
 import path from 'path';
 import webPush from 'web-push';
+import { Context } from '@app/context';
+import { db } from '@app/db';
+import { router as authRouter } from '@app/auth/routes';
+import { router as bloguinhoRouter } from '@app/bloguinho/routes';
+import { router as financeiroRouter } from '@app/financeiro/routes';
+import { router as healthCheckRouter } from '@app/healthcheck/routes';
+import { router as webpushRouter } from '@app/webpush/routes';
 
 if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
   console.log('You must set the VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY ' +
@@ -28,16 +31,22 @@ db.connect().catch((error) => {
 
 const app = express();
 
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(cors());
-app.use((req, res, next) => {
+
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://glayson.herokuapp.com']
+}));
+
+app.use((req, _res, next) => {
   Context.bind(req);
   next();
 });
 
+app.use('/api/healthcheck', healthCheckRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/bloguinho', bloguinhoRouter);
 app.use('/api/financeiro', financeiroRouter);
@@ -46,7 +55,7 @@ app.use('/api/webpush', webpushRouter);
 if (process.env.NODE_ENV !== 'development') {
   app.use(express.static(path.resolve(__dirname, 'public')));
 
-  app.get('*', (req, res) => {
+  app.get('*', (_req, res) => {
     res.setHeader('content-type', 'text/html');
     res.sendFile(path.resolve(__dirname, 'public/index.html'));
   });

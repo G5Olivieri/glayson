@@ -78,7 +78,7 @@ function initPushService(reg: ServiceWorkerRegistration) {
   });
 }
 
-export function initSW() {
+export default function initSW() {
   if (!accessToken) {
     console.log("it is not logged");
     return;
