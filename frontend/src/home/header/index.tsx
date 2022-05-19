@@ -21,6 +21,9 @@ export default function Header() {
             <Link to="/financeiro">Financeiro</Link>
           </li>
           <li>
+            <Link to="/vagabundo">Vagabundo</Link>
+          </li>
+          <li>
             <button type="button" onClick={() => auth.signout()}>
               {t("logout")}
             </button>

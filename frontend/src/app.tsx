@@ -9,6 +9,8 @@ import initSW from "@app/init-sw";
 import AuthProvider from "@app/login/auth-provider";
 import Login from "@app/login/login";
 import useAuth from "@app/login/use-auth";
+import Vagabundo from "@app/vagabundo";
+import NewTask from "@app/vagabundo/tasks/new-transaction";
 import React from "react";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -87,6 +89,22 @@ export default function App() {
               element={
                 <RequiredAuth>
                   <UpdateTransaction />
+                </RequiredAuth>
+              }
+            />
+            <Route
+              path="vagabundo"
+              element={
+                <RequiredAuth>
+                  <Vagabundo />
+                </RequiredAuth>
+              }
+            />
+            <Route
+              path="vagabundo/new"
+              element={
+                <RequiredAuth>
+                  <NewTask />
                 </RequiredAuth>
               }
             />

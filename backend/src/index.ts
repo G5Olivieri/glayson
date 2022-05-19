@@ -16,6 +16,7 @@ import { router as bloguinhoRouter } from '@app/bloguinho/routes';
 import { router as financeiroRouter } from '@app/financeiro/routes';
 import { router as healthCheckRouter } from '@app/healthcheck/routes';
 import { router as webpushRouter } from '@app/webpush/routes';
+import { router as vagabundoRouter } from '@app/vagabundo/routes';
 
 if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
   console.log('You must set the VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY ' +
@@ -51,6 +52,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/bloguinho', bloguinhoRouter);
 app.use('/api/financeiro', financeiroRouter);
 app.use('/api/webpush', webpushRouter);
+app.use('/api/vagabundo', vagabundoRouter);
 
 if (process.env.NODE_ENV !== 'development') {
   app.use(express.static(path.resolve(__dirname, 'public')));

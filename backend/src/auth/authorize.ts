@@ -1,7 +1,7 @@
+import { Context } from '@app/context';
+import { db } from '@app/db';
 import { RequestHandler } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { db } from '@app/db';
-import { Context } from '@app/context';
 
 export const authorize: RequestHandler = async (req, res, next) => {
   const authorization = req.headers['authorization'];
