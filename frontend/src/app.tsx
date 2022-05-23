@@ -6,6 +6,7 @@ import UpdateTransaction from "@app/financeiro/update-transaction";
 import Home from "@app/home";
 import i18n from "@app/i18n";
 import initSW from "@app/init-sw";
+import Layout from "@app/layout";
 import AuthProvider from "@app/login/auth-provider";
 import Login from "@app/login/login";
 import useAuth from "@app/login/use-auth";
@@ -13,7 +14,7 @@ import Vagabundo from "@app/vagabundo";
 import NewTask from "@app/vagabundo/tasks/new-transaction";
 import React from "react";
 import { I18nextProvider } from "react-i18next";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
 function RequiredAuth({ children }: { children: JSX.Element }): JSX.Element {
@@ -40,74 +41,19 @@ export default function App() {
               path="/"
               element={
                 <RequiredAuth>
-                  <Home />
+                  <Layout />
                 </RequiredAuth>
               }
-            />
-            <Route
-              path="login"
-              element={
-                <RequiredAuth>
-                  <Navigate to="/" />
-                </RequiredAuth>
-              }
-            />
-            <Route
-              path="bloguinho"
-              element={
-                <RequiredAuth>
-                  <Bloguinho />
-                </RequiredAuth>
-              }
-            />
-            <Route
-              path="bloguinho/posts/:id"
-              element={
-                <RequiredAuth>
-                  <Post />
-                </RequiredAuth>
-              }
-            />
-            <Route
-              path="financeiro"
-              element={
-                <RequiredAuth>
-                  <Financeiro />
-                </RequiredAuth>
-              }
-            />
-            <Route
-              path="financeiro/new"
-              element={
-                <RequiredAuth>
-                  <NewTransaction />
-                </RequiredAuth>
-              }
-            />
-            <Route
-              path="financeiro/:id"
-              element={
-                <RequiredAuth>
-                  <UpdateTransaction />
-                </RequiredAuth>
-              }
-            />
-            <Route
-              path="vagabundo"
-              element={
-                <RequiredAuth>
-                  <Vagabundo />
-                </RequiredAuth>
-              }
-            />
-            <Route
-              path="vagabundo/new"
-              element={
-                <RequiredAuth>
-                  <NewTask />
-                </RequiredAuth>
-              }
-            />
+            >
+              <Route index element={<Home />} />
+              <Route path="bloguinho" element={<Bloguinho />} />
+              <Route path="bloguinho/posts/:id" element={<Post />} />
+              <Route path="financeiro" element={<Financeiro />} />
+              <Route path="financeiro/new" element={<NewTransaction />} />
+              <Route path="financeiro/:id" element={<UpdateTransaction />} />
+              <Route path="vagabundo" element={<Vagabundo />} />
+              <Route path="vagabundo/new" element={<NewTask />} />
+            </Route>
             <Route path="*" element={<div>404 Not Found</div>} />
           </Routes>
         </BrowserRouter>
