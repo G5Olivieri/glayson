@@ -79,6 +79,7 @@ export default function UpdateTransaction() {
       <h1>{t("update transaction")}</h1>
       <form onSubmit={onSubmit}>
         <input
+          className={style.formControl}
           type="text"
           onChange={(e) => setName(e.target.value)}
           value={name}
@@ -87,6 +88,7 @@ export default function UpdateTransaction() {
           disabled={isLoading}
         />
         <input
+          className={style.formControl}
           type="date"
           onChange={(e) => setDate(e.target.value)}
           value={date}
@@ -95,27 +97,36 @@ export default function UpdateTransaction() {
           disabled={isLoading}
         />
         <PriceInput
+          className={style.formControl}
           onChange={onAmountChange}
           value={amount}
           required
           disabled={isLoading}
         />
 
-        <input
-          type="checkbox"
-          name="paid"
-          onChange={() => setPaid(!paid)}
-          checked={paid}
-          disabled={isLoading}
-        />
-        <label htmlFor="paid">{t("paid")}</label>
+        <div className={style.paidContainer}>
+          <input
+            className={style.formControl}
+            type="checkbox"
+            name="paid"
+            id="paid"
+            onChange={() => setPaid(!paid)}
+            checked={paid}
+            disabled={isLoading}
+          />
+          <label htmlFor="paid">{t("paid")}</label>
+        </div>
 
-        <button type="submit" className={style.update} disabled={isLoading}>
+        <button
+          type="submit"
+          className={`${style.formControl} ${style.update}`}
+          disabled={isLoading}
+        >
           {t("update")}
         </button>
         <button
           type="button"
-          className={style.delete}
+          className={`${style.formControl} ${style.delete}`}
           onClick={onDeleteClick}
           disabled={isLoading}
         >

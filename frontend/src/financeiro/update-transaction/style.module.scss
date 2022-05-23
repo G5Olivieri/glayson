@@ -7,16 +7,21 @@
   form {
     max-width: 300px;
 
-    * {
+    .formControl {
       width: 100%;
       height: 40px;
       font-size: 1.5rem;
     }
 
-    label {
+    .paidContainer {
       display: flex;
       align-items: center;
       gap: 10px;
+      font-size: 1.5rem;
+
+      label {
+        width: 100%;
+      }
     }
 
     button[disabled] {

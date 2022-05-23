@@ -19,6 +19,15 @@ const createTransactionSchema = Type.Object({
 
 type CreateTransactionType = Static<typeof createTransactionSchema>;
 
+const updateTransactionSchema = Type.Object({
+  name: Type.String(),
+  date: Type.String({ format: 'date' }),
+  amount: Type.Number(),
+  paid: Type.Boolean(),
+});
+
+type UpdateTransactionType = Static<typeof updateTransactionSchema>;
+
 const splitTransactions = ({ name, date, amount, paid, amountOfSplits }: CreateTransactionType, accountId: string) => {
   if (amountOfSplits == 0) {
     return [[name, date, amount, paid, accountId]];
@@ -111,7 +120,7 @@ router.get('/transactions/:id/pay', authorize, handlePromiseExpress(async (req, 
 router.put('/transactions/:id', authorize, handlePromiseExpress(async (req, res) => {
   const account = getAccountFromReq(req);
 
-  const isValid = ajv.validate<CreateTransactionType>(createTransactionSchema, req.body);
+  const isValid = ajv.validate<UpdateTransactionType>(updateTransactionSchema, req.body);
   if (!isValid) {
     return res.status(400).end();
   }
