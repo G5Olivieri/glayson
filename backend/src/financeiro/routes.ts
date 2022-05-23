@@ -60,10 +60,20 @@ router.post('/transactions', authorize, handlePromiseExpress(async (req, res) =>
 }));
 
 router.get('/transactions', authorize, handlePromiseExpress(async (req, res) => {
+  if (req.query.month === undefined
+    || (
+      typeof req.query.month !== 'string'
+      || !(/^\d{4}-\d{2}$/.test(req.query.month)) // 2022-05
+    )
+  ) {
+    return res.status(400).end();
+  }
   const account = getAccountFromReq(req);
+  const [year, month] = req.query.month.split('-') as [string, string];
 
-  const queryResult = await db.query('SELECT * FROM transactions WHERE owner_id=$1 ORDER BY date DESC', [account.id]);
-  return res.send(queryResult.rows).end();
+  const queryResult = await db.query('SELECT * FROM transactions WHERE owner_id=$1 AND EXTRACT(YEAR FROM date)=$2 AND EXTRACT(MONTH FROM date)=$3', [account.id, year, month]);
+
+  res.send(queryResult.rows).end();
 }));
 
 router.get('/transactions/:id', authorize, handlePromiseExpress(async (req, res) => {

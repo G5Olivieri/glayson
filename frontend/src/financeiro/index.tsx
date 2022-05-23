@@ -1,6 +1,7 @@
 import { TransactionResponse } from "@app/financeiro/transaction-response";
 import Transactions from "@app/financeiro/transactions";
 import useAuth from "@app/login/use-auth";
+import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -13,6 +14,7 @@ export default function Financeiro() {
   const [transactions, setTransactions] = useState<{
     data: TransactionResponse[];
   }>({ data: [] });
+  const [month, setMonth] = useState(format(new Date(), "yyyy-MM"));
 
   const pay = (transaction: TransactionResponse) => {
     fetch(`${baseUrl}/api/financeiro/transactions/${transaction.id}/pay`, {
@@ -31,14 +33,14 @@ export default function Financeiro() {
   };
 
   useEffect(() => {
-    fetch(`${baseUrl}/api/financeiro/transactions`, {
+    fetch(`${baseUrl}/api/financeiro/transactions?month=${month}`, {
       headers: {
         Authorization: `Bearer ${auth.accessToken}`,
       },
     })
       .then((res) => res.json())
       .then((data) => setTransactions({ data }));
-  }, []);
+  }, [month]);
 
   return (
     <div className={style.container}>
@@ -46,6 +48,12 @@ export default function Financeiro() {
       <Link to="new" className={style.new}>
         {t("new")}
       </Link>
+      <input
+        className={style.monthFilter}
+        type="month"
+        value={month}
+        onChange={(e) => setMonth(e.target.value)}
+      />
       <Transactions transactions={transactions.data} pay={pay} />
     </div>
   );

@@ -36,6 +36,7 @@ router.post('/tasks', authorize, handlePromiseExpress(async (req, res) => {
   const account = getAccountFromReq(req);
 
   const queryResult = await db.query('INSERT INTO tasks(name, assigned_to_id) VALUES($1, $2) RETURNING id, name, created_at, done', [req.body.name, account.id]);
+
   if (queryResult.rowCount === 0) {
     return res.status(500).end();
   }
