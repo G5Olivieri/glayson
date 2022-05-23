@@ -15,6 +15,8 @@ export default function NewTransaction() {
   const [name, setName] = useState("");
   const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [paid, setPaid] = useState(false);
+  const [split, setSplit] = useState(false);
+  const [amountOfSplits, setAmountOfSplits] = useState(0);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,9 +31,11 @@ export default function NewTransaction() {
         date,
         paid,
         amount,
+        amountOfSplits,
       }),
     }).then((res) => {
       if (res.ok) {
+        // TODO: go to "financeiro" page without back to "new transaction" page
         window.history.back();
       }
     });
@@ -46,28 +50,66 @@ export default function NewTransaction() {
       <h1>{t("new transaction")}</h1>
       <form onSubmit={onSubmit}>
         <input
+          className={style.formControl}
           type="text"
           onChange={(e) => setName(e.target.value)}
           value={name}
           placeholder={t("name")}
           required
         />
+        <div className={style.splitContainer}>
+          <input
+            className={style.formControl}
+            type="checkbox"
+            name="split"
+            onChange={() => setSplit(!split)}
+            checked={split}
+            id="split"
+          />{" "}
+          <label htmlFor="split">{t("split")}</label>
+        </div>
+
+        {split && (
+          <input
+            className={style.formControl}
+            type="number"
+            min="1"
+            onChange={(event) =>
+              setAmountOfSplits(parseInt(event.target.value, 10))
+            }
+            value={amountOfSplits === 0 ? "" : amountOfSplits}
+            required
+            placeholder={t("amount of splits")}
+          />
+        )}
         <input
+          className={style.formControl}
           type="date"
           onChange={(e) => setDate(e.target.value)}
           value={date}
           placeholder={t("date")}
           required
         />
-        <PriceInput onChange={onAmountChange} value={amount} required />
-        <input
-          type="checkbox"
-          name="paid"
-          onChange={() => setPaid(!paid)}
-          checked={paid}
-        />{" "}
-        <label htmlFor="paid">{t("paid")}</label>
-        <button type="submit">{t("create")}</button>
+        <PriceInput
+          className={style.formControl}
+          onChange={onAmountChange}
+          value={amount}
+          required
+        />
+        <div className={style.paidContainer}>
+          <input
+            className={style.formControl}
+            type="checkbox"
+            name="paid"
+            onChange={() => setPaid(!paid)}
+            checked={paid}
+            id="paid"
+          />{" "}
+          <label htmlFor="paid">{t("paid")}</label>
+        </div>
+        <button className={style.formControl} type="submit">
+          {t("create")}
+        </button>
       </form>
     </div>
   );

@@ -6,7 +6,7 @@ docker run \
     --rm \
     --network host \
     -e SONAR_HOST_URL="http://localhost:9000" \
-    -e SONAR_LOGIN="ecf268eb6ba35ce01e43de2c2d5695bea7c0a4f8" \
+    -e SONAR_LOGIN="11aab011d6bd02b1c32bd44281cecec584518a80" \
     -v "${PWD}:/usr/src" \
     sonarsource/sonar-scanner-cli \
       -Dsonar.projectKey=backend \

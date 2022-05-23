@@ -6,6 +6,7 @@ type PriceInputProps = {
   value: number;
   required?: boolean;
   disabled?: boolean;
+  className?: string;
 };
 
 export default function PriceInput({
@@ -13,6 +14,7 @@ export default function PriceInput({
   onChange,
   required,
   disabled,
+  className,
 }: PriceInputProps) {
   const [oldValue, setOldValue] = useState(
     formatPrice(value.toString(), ",", ".")
@@ -59,6 +61,7 @@ export default function PriceInput({
 
   return (
     <input
+      className={className}
       inputMode="numeric"
       disabled={disabled}
       required={required}
@@ -71,4 +74,5 @@ export default function PriceInput({
 PriceInput.defaultProps = {
   required: false,
   disabled: false,
+  className: "",
 };

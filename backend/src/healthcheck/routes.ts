@@ -3,7 +3,7 @@ import { Router } from 'express';
 
 export const router = Router();
 
-router.all('/', async (req, res) => {
+router.all('/', async (_req, res) => {
   try {
     const queryResult = await db.query('SELECT 1 as result;');
     if(queryResult.rowCount > 0 && queryResult.rows[0].result === 1) {

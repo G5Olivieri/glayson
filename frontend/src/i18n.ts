@@ -25,6 +25,8 @@ i18n
           commentary: "comentário",
           comment: "comentar",
           comments: "comentários",
+          split: "parcelar",
+          "amount of splits": "quantidade de parcelas",
         },
       },
     },
