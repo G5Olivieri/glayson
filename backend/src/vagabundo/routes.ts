@@ -60,7 +60,7 @@ router.put('/tasks/:id', authorize, handlePromiseExpress(async (req, res) => {
 
   const account = getAccountFromReq(req);
 
-  const queryResult = await db.query('UPDATE tasks SET name=$1, done=$2 WHERE id=$4 AND assigned_to_id=$5', [req.body.name, req.body.done, req.body.did_at, req.params.id, account.id]);
+  const queryResult = await db.query('UPDATE tasks SET name=$1, done=$2 WHERE id=$3 AND assigned_to_id=$4', [req.body.name, req.body.done, req.params.id, account.id]);
   if (queryResult.rowCount === 0) {
     return res.status(404).end();
   }
