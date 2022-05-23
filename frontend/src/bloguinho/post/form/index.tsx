@@ -23,6 +23,7 @@ export default function CommentForm({ onNewComment }: CommentFormProps) {
         placeholder={t("commentary")}
         onChange={(event) => setText(event.target.value)}
         value={text}
+        required
       />
       <button type="submit">{t("comment")}</button>
     </form>

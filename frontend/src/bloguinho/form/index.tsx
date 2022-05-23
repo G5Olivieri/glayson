@@ -22,6 +22,7 @@ export default function PostForm({ onNewPost }: PostFormProps) {
       <textarea
         onChange={(event) => setText(event.target.value)}
         value={text}
+        required
       />
       <button type="submit">{t("submit")}</button>
     </form>
