@@ -1,21 +1,20 @@
 import PostForm from "@app/bloguinho/form";
 import { PostResponse } from "@app/bloguinho/post-response";
 import Posts from "@app/bloguinho/posts";
-import useAuth from "@app/login/use-auth";
+import useAuthFetch from "@app/login/use-auth-fetch";
 import React, { useEffect, useState } from "react";
 import style from "./style.module.scss";
 
 export default function Bloguinho() {
-  const auth = useAuth();
   const baseUrl = import.meta.env.VITE_BASE_API_URL;
+  const authFetch = useAuthFetch();
   const [posts, setPosts] = useState<{ data: PostResponse[] }>({ data: [] });
 
   const onNewPost = (newText: string) => {
-    fetch(`${baseUrl}/api/bloguinho/posts`, {
+    authFetch(`${baseUrl}/api/bloguinho/posts`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${auth.accessToken}`,
       },
       body: JSON.stringify({ text: newText }),
     })
@@ -39,22 +38,17 @@ export default function Bloguinho() {
   };
 
   const onDelete = (id: string) => {
-    fetch(`${baseUrl}/api/bloguinho/posts/${id}`, {
+    authFetch(`${baseUrl}/api/bloguinho/posts/${id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
         accept: "application/json",
-        authorization: `Bearer ${auth.accessToken}`,
       },
     }).then(() => setPosts({ data: posts.data.filter((p) => p.id !== id) }));
   };
 
   useEffect(() => {
-    fetch(`${baseUrl}/api/bloguinho/posts`, {
-      headers: {
-        authorization: `Bearer ${auth.accessToken}`,
-      },
-    })
+    authFetch(`${baseUrl}/api/bloguinho/posts`)
       .then((res) => res.json())
       .then((data) => setPosts({ data }));
   }, []);

@@ -12,7 +12,6 @@ export const authorize: RequestHandler = async (req, res, next) => {
   if (scheme !== 'Bearer' || token === undefined || token === '') {
     return res.status(401).end();
   }
-
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     const invalidTokensqueryResult = await db.query('SELECT * FROM invalid_tokens WHERE access_token=$1 LIMIT 1;', [req.body.access_token]);
@@ -27,6 +26,7 @@ export const authorize: RequestHandler = async (req, res, next) => {
     context.setAccount(queryResult.rows[0]);
     return next();
   } catch (error) {
+    console.error(error);
     return res.status(401).end();
   }
 };

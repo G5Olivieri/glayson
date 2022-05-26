@@ -1,6 +1,6 @@
 import PriceInput from "@app/financeiro/price-input";
 import { TransactionResponse } from "@app/financeiro/transaction-response";
-import useAuth from "@app/login/use-auth";
+import useAuthFetch from "@app/login/use-auth-fetch";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -11,7 +11,7 @@ export default function UpdateTransaction() {
 
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
-  const auth = useAuth();
+  const authFetch = useAuthFetch();
 
   const [isLoading, setIsLoading] = useState(true);
   const [amount, setAmount] = useState(0);
@@ -20,10 +20,9 @@ export default function UpdateTransaction() {
   const [paid, setPaid] = useState(false);
 
   useEffect(() => {
-    fetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
+    authFetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${auth.accessToken}`,
       },
     })
       .then((res) => res.json() as Promise<TransactionResponse>)
@@ -44,7 +43,7 @@ export default function UpdateTransaction() {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
+    authFetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -65,11 +64,10 @@ export default function UpdateTransaction() {
 
   const onDeleteClick = () => {
     setIsLoading(true);
-    fetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
+    authFetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${auth.accessToken}`,
       },
     }).then(backIfSuccess);
   };

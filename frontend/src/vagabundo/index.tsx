@@ -1,4 +1,4 @@
-import useAuth from "@app/login/use-auth";
+import useAuthFetch from "@app/login/use-auth-fetch";
 import { TaskResponse } from "@app/vagabundo/task-response";
 import Tasks from "@app/vagabundo/tasks";
 import React, { useEffect, useState } from "react";
@@ -8,17 +8,16 @@ import style from "./style.module.scss";
 
 export default function Vagabundo() {
   const baseUrl = import.meta.env.VITE_BASE_API_URL;
-  const auth = useAuth();
+  const authFetch = useAuthFetch();
   const { t } = useTranslation();
   const [tasks, setTasks] = useState<{
     data: TaskResponse[];
   }>({ data: [] });
 
   const updateTask = (task: TaskResponse) => {
-    fetch(`${baseUrl}/api/vagabundo/tasks/${task.id}`, {
+    authFetch(`${baseUrl}/api/vagabundo/tasks/${task.id}`, {
       method: "PUT",
       headers: {
-        authorization: `Bearer ${auth.accessToken}`,
         "content-type": "application/json",
       },
       body: JSON.stringify({
@@ -35,11 +34,8 @@ export default function Vagabundo() {
   };
 
   const deleteTask = (task: TaskResponse) => {
-    fetch(`${baseUrl}/api/vagabundo/tasks/${task.id}`, {
+    authFetch(`${baseUrl}/api/vagabundo/tasks/${task.id}`, {
       method: "DELETE",
-      headers: {
-        authorization: `Bearer ${auth.accessToken}`,
-      },
     }).then((res) => {
       if (res.ok) {
         setTasks({
@@ -50,11 +46,7 @@ export default function Vagabundo() {
   };
 
   useEffect(() => {
-    fetch(`${baseUrl}/api/vagabundo/tasks`, {
-      headers: {
-        Authorization: `Bearer ${auth.accessToken}`,
-      },
-    })
+    authFetch(`${baseUrl}/api/vagabundo/tasks`)
       .then((res) => res.json())
       .then((data) => setTasks({ data }));
   }, []);

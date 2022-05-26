@@ -74,11 +74,11 @@ export default function useProvideAuthService(): AuthService {
     return now > expiredAtInt;
   };
 
-  const refreshToken = async (
+  const requestRefreshToken = async (
     oldAccessToken: string,
     oldRefreshToken: string
-  ) =>
-    fetch(`${baseUrl}/api/auth/token`, {
+  ) => {
+    return fetch(`${baseUrl}/api/auth/token`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -88,7 +88,41 @@ export default function useProvideAuthService(): AuthService {
         access_token: oldAccessToken,
         refresh_token: oldRefreshToken,
       }),
-    }).then((res) => res.json() as Promise<AccessTokenType>);
+    }).then((res) => {
+      return res.json() as Promise<AccessTokenType>;
+    });
+  };
+
+  const tryRefreshToken = async (): Promise<string | null> => {
+    const storagedAccessToken = localStorage.getItem("access_token");
+    const storagedRefreshToken = localStorage.getItem("refresh_token");
+    const storagedExpiredAt = localStorage.getItem("expired_at");
+
+    if (!storagedAccessToken || !storagedRefreshToken || !storagedExpiredAt) {
+      clearToken();
+      return null;
+    }
+
+    if (isExpired(storagedExpiredAt)) {
+      return new Promise((res) => {
+        requestRefreshToken(storagedAccessToken, storagedRefreshToken)
+          .then((response) => {
+            setToken(
+              response.access_token,
+              response.refresh_token,
+              response.expires_in
+            );
+            res(response.access_token);
+          })
+          .catch(() => {
+            clearToken();
+            res(null);
+          });
+      });
+    }
+
+    return null;
+  };
 
   useEffect(() => {
     const storagedAccessToken = localStorage.getItem("access_token");
@@ -101,7 +135,7 @@ export default function useProvideAuthService(): AuthService {
     }
 
     if (isExpired(storagedExpiredAt)) {
-      refreshToken(storagedAccessToken, storagedRefreshToken)
+      requestRefreshToken(storagedAccessToken, storagedRefreshToken)
         .then((response) => {
           setToken(
             response.access_token,
@@ -136,5 +170,6 @@ export default function useProvideAuthService(): AuthService {
     accessToken,
     signin,
     signout,
+    tryRefreshToken,
   };
 }

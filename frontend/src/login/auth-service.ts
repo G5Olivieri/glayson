@@ -6,4 +6,5 @@ export interface AuthService {
   accessToken: string;
   signin(credential: Credential): Promise<void>;
   signout(): Promise<void>;
+  tryRefreshToken(): Promise<string | null>;
 }

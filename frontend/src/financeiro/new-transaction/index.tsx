@@ -1,5 +1,5 @@
 import PriceInput from "@app/financeiro/price-input";
-import useAuth from "@app/login/use-auth";
+import useAuthFetch from "@app/login/use-auth-fetch";
 import { format } from "date-fns";
 import React, { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,7 +9,7 @@ export default function NewTransaction() {
   const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
   const { t } = useTranslation();
-  const auth = useAuth();
+  const authFetch = useAuthFetch();
 
   const [amount, setAmount] = useState(0);
   const [name, setName] = useState("");
@@ -20,11 +20,10 @@ export default function NewTransaction() {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetch(`${baseUrl}/api/financeiro/transactions`, {
+    authFetch(`${baseUrl}/api/financeiro/transactions`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${auth.accessToken}`,
       },
       body: JSON.stringify({
         name,

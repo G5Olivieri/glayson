@@ -1,6 +1,6 @@
 import { TransactionResponse } from "@app/financeiro/transaction-response";
 import Transactions from "@app/financeiro/transactions";
-import useAuth from "@app/login/use-auth";
+import useAuthFetch from "@app/login/use-auth-fetch";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,38 +9,33 @@ import style from "./style.module.scss";
 
 export default function Financeiro() {
   const baseUrl = import.meta.env.VITE_BASE_API_URL;
-  const auth = useAuth();
   const { t } = useTranslation();
+  const authFetch = useAuthFetch();
+
   const [transactions, setTransactions] = useState<{
     data: TransactionResponse[];
   }>({ data: [] });
   const [month, setMonth] = useState(format(new Date(), "yyyy-MM"));
 
-  const pay = (transaction: TransactionResponse) => {
-    fetch(`${baseUrl}/api/financeiro/transactions/${transaction.id}/pay`, {
-      headers: {
-        authorization: `Bearer ${auth.accessToken}`,
-      },
-    }).then((res) => {
-      if (res.ok) {
-        setTransactions({
-          data: transactions.data.map((tr) =>
-            tr.id === transaction.id ? { ...tr, paid: true } : tr
-          ),
-        });
-      }
-    });
-  };
-
   useEffect(() => {
-    fetch(`${baseUrl}/api/financeiro/transactions?month=${month}`, {
-      headers: {
-        Authorization: `Bearer ${auth.accessToken}`,
-      },
-    })
+    authFetch(`${baseUrl}/api/financeiro/transactions?month=${month}`)
       .then((res) => res.json())
       .then((data) => setTransactions({ data }));
   }, [month]);
+
+  const pay = async (transaction: TransactionResponse) => {
+    const res = await authFetch(
+      `${baseUrl}/api/financeiro/transactions/${transaction.id}/pay`
+    );
+
+    if (res.ok) {
+      setTransactions({
+        data: transactions.data.map((tr) =>
+          tr.id === transaction.id ? { ...tr, paid: true } : tr
+        ),
+      });
+    }
+  };
 
   return (
     <div className={style.container}>
