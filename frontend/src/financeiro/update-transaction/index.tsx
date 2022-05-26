@@ -47,7 +47,6 @@ export default function UpdateTransaction() {
       method: "PUT",
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${auth.accessToken}`,
       },
       body: JSON.stringify({
         name,
