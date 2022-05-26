@@ -29,11 +29,18 @@ jobs:
       - name: Install backend dependencies
         run: docker run --rm -v $PWD/backend:/app -w /app node:16-alpine sh -c 'yarn'
 
+      - name: build backend
+        run: docker run --rm -v $PWD/backend:/app -w /app node:16-alpine sh -c 'yarn build'
+
       - name: Run backend linter
         run: docker run --rm -v $PWD/backend:/app -w /app node:16-alpine sh -c 'yarn lint'
 
       - name: Install frontend dependencies
         run: docker run --rm -v $PWD/frontend:/app -w /app node:16-alpine sh -c 'yarn'
+
+      - name: build frontend
+        run: docker run --rm -v $PWD/frontend:/app -w /app node:16-alpine sh -c 'yarn build'
+
 
       - name: Run frontend linter
         run: docker run --rm -v $PWD/frontend:/app -w /app node:16-alpine sh -c 'yarn lint'
