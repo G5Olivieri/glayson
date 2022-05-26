@@ -29,9 +29,9 @@ export default function Task({ task, onUpdateTask, onDeleteTask }: TaskProps) {
         checked={done}
         onChange={onChange}
         name="done"
-        id="done"
+        id={task.id}
       />
-      <label htmlFor="done" className={style.name}>
+      <label htmlFor={task.id} className={style.name}>
         {task.name}
       </label>
       <button type="button" onClick={() => onDeleteTask(task)}>
