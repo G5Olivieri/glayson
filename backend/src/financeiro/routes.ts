@@ -49,12 +49,8 @@ router.post('/transactions', authorize, handlePromiseExpress(async (req, res) =>
   }
 
   const transactions = splitTransactions(req.body, account.id);
-  const values = [];
   let counter = 1;
-
-  for(let i = 0; i < transactions.length; i++) {
-    values.push(`($${counter++}, $${counter++}, $${counter++}, $${counter++}, $${counter++})`);
-  }
+  const values = transactions.map(() =>  `($${counter++}, $${counter++}, $${counter++}, $${counter++}, $${counter++})`);
 
   const queryResult = await db.query(`
   INSERT INTO
