@@ -1,12 +1,12 @@
 import PriceInput from "@app/financeiro/price-input";
-import { TransactionResponse } from "@app/financeiro/transaction-response";
+import { ExpenseResponse } from "@app/financeiro/expense-response";
 import useAuthFetch from "@app/login/use-auth-fetch";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import style from "./style.module.scss";
 
-export default function UpdateTransaction() {
+export default function UpdateExpense() {
   const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
   const { t } = useTranslation();
@@ -20,12 +20,12 @@ export default function UpdateTransaction() {
   const [paid, setPaid] = useState(false);
 
   useEffect(() => {
-    authFetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
+    authFetch(`${baseUrl}/api/financeiro/expenses/${params.id}`, {
       headers: {
         "content-type": "application/json",
       },
     })
-      .then((res) => res.json() as Promise<TransactionResponse>)
+      .then((res) => res.json() as Promise<ExpenseResponse>)
       .then((data) => {
         setAmount(data.amount);
         setName(data.name);
@@ -43,7 +43,7 @@ export default function UpdateTransaction() {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    authFetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
+    authFetch(`${baseUrl}/api/financeiro/expenses/${params.id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -63,7 +63,7 @@ export default function UpdateTransaction() {
 
   const onDeleteClick = () => {
     setIsLoading(true);
-    authFetch(`${baseUrl}/api/financeiro/transactions/${params.id}`, {
+    authFetch(`${baseUrl}/api/financeiro/expenses/${params.id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
@@ -73,7 +73,7 @@ export default function UpdateTransaction() {
 
   return (
     <div className={style.container}>
-      <h1>{t("update transaction")}</h1>
+      <h1>{t("update expense")}</h1>
       <form onSubmit={onSubmit}>
         <input
           className={style.formControl}

@@ -1,8 +1,8 @@
 import Bloguinho from "@app/bloguinho";
 import Post from "@app/bloguinho/post";
 import Financeiro from "@app/financeiro";
-import NewTransaction from "@app/financeiro/new-transaction";
-import UpdateTransaction from "@app/financeiro/update-transaction";
+import NewExpense from "@app/financeiro/new-expense";
+import UpdateExpense from "@app/financeiro/update-expense";
 import Home from "@app/home";
 import i18n from "@app/i18n";
 import initSW from "@app/init-sw";
@@ -49,8 +49,8 @@ export default function App() {
               <Route path="bloguinho" element={<Bloguinho />} />
               <Route path="bloguinho/posts/:id" element={<Post />} />
               <Route path="financeiro" element={<Financeiro />} />
-              <Route path="financeiro/new" element={<NewTransaction />} />
-              <Route path="financeiro/:id" element={<UpdateTransaction />} />
+              <Route path="financeiro/new" element={<NewExpense />} />
+              <Route path="financeiro/:id" element={<UpdateExpense />} />
               <Route path="vagabundo" element={<Vagabundo />} />
               <Route path="vagabundo/new" element={<NewTask />} />
             </Route>

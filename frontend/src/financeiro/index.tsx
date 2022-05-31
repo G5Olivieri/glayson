@@ -1,5 +1,5 @@
-import { TransactionResponse } from "@app/financeiro/transaction-response";
-import Transactions from "@app/financeiro/transactions";
+import { ExpenseResponse } from "@app/financeiro/expense-response";
+import Expenses from "@app/financeiro/expenses";
 import useAuthFetch from "@app/login/use-auth-fetch";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -12,25 +12,25 @@ export default function Financeiro() {
   const { t } = useTranslation();
   const authFetch = useAuthFetch();
 
-  const [transactions, setTransactions] = useState<{
-    data: TransactionResponse[];
+  const [expenses, setExpenses] = useState<{
+    data: ExpenseResponse[];
   }>({ data: [] });
   const [month, setMonth] = useState(format(new Date(), "yyyy-MM"));
 
   useEffect(() => {
-    authFetch(`${baseUrl}/api/financeiro/transactions?month=${month}`)
+    authFetch(`${baseUrl}/api/financeiro/expenses?month=${month}`)
       .then((res) => res.json())
-      .then((data) => setTransactions({ data }));
+      .then((data) => setExpenses({ data }));
   }, [month]);
 
-  const pay = async (transaction: TransactionResponse) => {
+  const pay = async (transaction: ExpenseResponse) => {
     const res = await authFetch(
-      `${baseUrl}/api/financeiro/transactions/${transaction.id}/pay`
+      `${baseUrl}/api/financeiro/expenses/${transaction.id}/pay`
     );
 
     if (res.ok) {
-      setTransactions({
-        data: transactions.data.map((tr) =>
+      setExpenses({
+        data: expenses.data.map((tr) =>
           tr.id === transaction.id ? { ...tr, paid: true } : tr
         ),
       });
@@ -49,7 +49,7 @@ export default function Financeiro() {
         value={month}
         onChange={(e) => setMonth(e.target.value)}
       />
-      <Transactions transactions={transactions.data} pay={pay} />
+      <Expenses expenses={expenses.data} pay={pay} />
     </div>
   );
 }

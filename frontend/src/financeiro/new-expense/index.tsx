@@ -5,7 +5,7 @@ import React, { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import style from "./style.module.scss";
 
-export default function NewTransaction() {
+export default function NewExpense() {
   const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
   const { t } = useTranslation();
@@ -46,7 +46,7 @@ export default function NewTransaction() {
 
   return (
     <div className={style.container}>
-      <h1>{t("new transaction")}</h1>
+      <h1>{t("new expense")}</h1>
       <form onSubmit={onSubmit}>
         <input
           className={style.formControl}

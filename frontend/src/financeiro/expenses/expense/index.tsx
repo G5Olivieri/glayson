@@ -1,5 +1,5 @@
 import formatPrice from "@app/financeiro/format-price";
-import { TransactionResponse } from "@app/financeiro/transaction-response";
+import { ExpenseResponse } from "@app/financeiro/expense-response";
 import { format, parseISO } from "date-fns";
 import React, { MouseEvent, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 import style from "./style.module.scss";
 
 type TransactionProps = {
-  transaction: TransactionResponse;
-  pay: (transaction: TransactionResponse) => void;
+  transaction: ExpenseResponse;
+  pay: (transaction: ExpenseResponse) => void;
 };
 
-export default function Transaction({ transaction, pay }: TransactionProps) {
+export default function Expense({ transaction, pay }: TransactionProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const buttonRef = useRef<HTMLButtonElement>(null);
