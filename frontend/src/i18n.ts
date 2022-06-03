@@ -27,6 +27,8 @@ i18n
           comments: "comentários",
           split: "parcelar",
           "amount of splits": "quantidade de parcelas",
+          "only this one": "somente este",
+          repeat: "repetir",
         },
       },
     },

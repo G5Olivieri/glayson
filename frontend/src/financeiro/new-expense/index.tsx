@@ -16,11 +16,12 @@ export default function NewExpense() {
   const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [paid, setPaid] = useState(false);
   const [split, setSplit] = useState(false);
+  const [repeat, setRepeat] = useState(false);
   const [amountOfSplits, setAmountOfSplits] = useState(0);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    authFetch(`${baseUrl}/api/financeiro/transactions`, {
+    authFetch(`${baseUrl}/api/financeiro/expenses`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -28,8 +29,9 @@ export default function NewExpense() {
       body: JSON.stringify({
         name,
         date,
-        paid,
+        paid: !repeat && paid,
         amount,
+        repeat,
         amountOfSplits,
       }),
     }).then((res) => {
@@ -56,30 +58,45 @@ export default function NewExpense() {
           placeholder={t("name")}
           required
         />
+
         <div className={style.splitContainer}>
           <input
             className={style.formControl}
             type="checkbox"
             name="split"
-            onChange={() => setSplit(!split)}
-            checked={split}
-            id="split"
+            onChange={() => setRepeat(!repeat)}
+            checked={repeat}
+            id="repeat"
           />{" "}
-          <label htmlFor="split">{t("split")}</label>
+          <label htmlFor="repeat">{t("repeat")}</label>
         </div>
-
-        {split && (
-          <input
-            className={style.formControl}
-            type="number"
-            min="1"
-            onChange={(event) =>
-              setAmountOfSplits(parseInt(event.target.value, 10))
-            }
-            value={amountOfSplits === 0 ? "" : amountOfSplits}
-            required
-            placeholder={t("amount of splits")}
-          />
+        {repeat && (
+          <div>
+            <div className={style.splitContainer}>
+              <input
+                className={style.formControl}
+                type="checkbox"
+                name="split"
+                onChange={() => setSplit(!split)}
+                checked={split}
+                id="split"
+              />{" "}
+              <label htmlFor="split">{t("split")}</label>
+            </div>
+            {split && (
+              <input
+                className={style.formControl}
+                type="number"
+                min="1"
+                onChange={(event) =>
+                  setAmountOfSplits(parseInt(event.target.value, 10))
+                }
+                value={amountOfSplits === 0 ? "" : amountOfSplits}
+                required
+                placeholder={t("amount of splits")}
+              />
+            )}
+          </div>
         )}
         <input
           className={style.formControl}
@@ -101,7 +118,8 @@ export default function NewExpense() {
             type="checkbox"
             name="paid"
             onChange={() => setPaid(!paid)}
-            checked={paid}
+            checked={!repeat && paid}
+            disabled={repeat}
             id="paid"
           />{" "}
           <label htmlFor="paid">{t("paid")}</label>

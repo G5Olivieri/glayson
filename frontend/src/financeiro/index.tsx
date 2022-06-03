@@ -24,8 +24,24 @@ export default function Financeiro() {
   }, [month]);
 
   const pay = async (transaction: ExpenseResponse) => {
+    // eslint-disable-next-line camelcase
+    const { id, name, amount, group_id, date, virtual } = transaction;
     const res = await authFetch(
-      `${baseUrl}/api/financeiro/expenses/${transaction.id}/pay`
+      `${baseUrl}/api/financeiro/expenses/${id}/pay`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          amount,
+          date,
+          // eslint-disable-next-line camelcase
+          group_id,
+          virtual,
+        }),
+      }
     );
 
     if (res.ok) {

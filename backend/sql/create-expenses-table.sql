@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS transactions(
+CREATE TABLE IF NOT EXISTS expenses(
     id uuid DEFAULT uuid_generate_v4(),
     name text NOT NULL,
     amount bigint NOT NULL,
@@ -12,4 +12,7 @@ CREATE TABLE IF NOT EXISTS transactions(
     REFERENCES accounts(id)
 );
 
-DROP TABLE IF EXISTS transactions;
+ALTER TABLE expenses ADD COLUMN group_id uuid;
+ALTER TABLE expenses ADD COLUMN cancelled bool DEFAULT false;
+
+DROP TABLE IF EXISTS expenses;

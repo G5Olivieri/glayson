@@ -5,4 +5,6 @@ export type ExpenseResponse = {
   amount: number;
   paid: boolean;
   created_at: string;
+  group_id: string;
+  virtual: boolean;
 };

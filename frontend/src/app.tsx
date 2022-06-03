@@ -11,7 +11,7 @@ import AuthProvider from "@app/login/auth-provider";
 import Login from "@app/login/login";
 import useAuth from "@app/login/use-auth";
 import Vagabundo from "@app/vagabundo";
-import NewTask from "@app/vagabundo/tasks/new-transaction";
+import NewTask from "@app/vagabundo/tasks/new-task";
 import React from "react";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter, Route, Routes } from "react-router-dom";

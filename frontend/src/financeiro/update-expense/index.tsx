@@ -1,8 +1,11 @@
-import PriceInput from "@app/financeiro/price-input";
 import { ExpenseResponse } from "@app/financeiro/expense-response";
+import PriceInput from "@app/financeiro/price-input";
 import useAuthFetch from "@app/login/use-auth-fetch";
+import useQuery from "@app/use-query";
+import { format } from "date-fns";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router";
 import { useParams } from "react-router-dom";
 import style from "./style.module.scss";
 
@@ -11,6 +14,8 @@ export default function UpdateExpense() {
 
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
+  const { search } = useLocation();
+  const query = useQuery();
   const authFetch = useAuthFetch();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -18,9 +23,11 @@ export default function UpdateExpense() {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [paid, setPaid] = useState(false);
+  const [groupId, setGroupId] = useState<string | null>(null);
+  const [onlyThisOne, setOnlyThisOne] = useState(true);
 
   useEffect(() => {
-    authFetch(`${baseUrl}/api/financeiro/expenses/${params.id}`, {
+    authFetch(`${baseUrl}/api/financeiro/expenses/${params.id}${search}`, {
       headers: {
         "content-type": "application/json",
       },
@@ -31,6 +38,7 @@ export default function UpdateExpense() {
         setName(data.name);
         setDate(data.date.split("T")[0]);
         setPaid(data.paid);
+        setGroupId(data.group_id);
         setIsLoading(false);
       });
   }, []);
@@ -43,7 +51,7 @@ export default function UpdateExpense() {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    authFetch(`${baseUrl}/api/financeiro/expenses/${params.id}`, {
+    authFetch(`${baseUrl}/api/financeiro/expenses/${params.id}${search}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -51,8 +59,10 @@ export default function UpdateExpense() {
       body: JSON.stringify({
         name,
         date,
-        paid,
         amount: parseInt(amount.toString(), 10),
+        paid,
+        group_id: groupId,
+        only_this_one: paid || onlyThisOne,
       }),
     }).then(backIfSuccess);
   };
@@ -63,12 +73,27 @@ export default function UpdateExpense() {
 
   const onDeleteClick = () => {
     setIsLoading(true);
-    authFetch(`${baseUrl}/api/financeiro/expenses/${params.id}`, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json",
-      },
-    }).then(backIfSuccess);
+    const month = format(new Date(date), "yyyy-MM");
+    const virtual = query.get("virtual") ?? "false";
+    const qs = new URLSearchParams({
+      virtual,
+      month,
+      only_this_one: onlyThisOne.toString(),
+    });
+
+    if (groupId) {
+      qs.set("group_id", groupId);
+    }
+
+    authFetch(
+      `${baseUrl}/api/financeiro/expenses/${params.id}?${qs.toString()}`,
+      {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    ).then(backIfSuccess);
   };
 
   return (
@@ -101,7 +126,7 @@ export default function UpdateExpense() {
           disabled={isLoading}
         />
 
-        <div className={style.paidContainer}>
+        <div className={style.checkbox}>
           <input
             className={style.formControl}
             type="checkbox"
@@ -113,6 +138,20 @@ export default function UpdateExpense() {
           />
           <label htmlFor="paid">{t("paid")}</label>
         </div>
+
+        {groupId && (
+          <div className={style.checkbox}>
+            <input
+              className={style.formControl}
+              type="checkbox"
+              id="onlyThisOne"
+              onChange={() => setOnlyThisOne(!onlyThisOne)}
+              checked={paid || onlyThisOne}
+              disabled={isLoading || paid}
+            />
+            <label htmlFor="onlyThisOne">{t("only this one")}</label>
+          </div>
+        )}
 
         <button
           type="submit"

@@ -16,7 +16,7 @@ export default function Expense({ transaction, pay }: TransactionProps) {
   const navigate = useNavigate();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const { id, name, date, amount, paid } = transaction;
+  const { id, name, date, amount, paid, group_id: groupId } = transaction;
 
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
     if (buttonRef.current) {
@@ -25,6 +25,17 @@ export default function Expense({ transaction, pay }: TransactionProps) {
         return;
       }
     }
+
+    if (transaction.virtual) {
+      navigate(
+        `/financeiro/${transaction.group_id}?virtual=true&month=${format(
+          parseISO(transaction.date.split("T")[0]),
+          "yyyy-MM"
+        )}`
+      );
+      return;
+    }
+
     navigate(`/financeiro/${id}`);
   };
 
