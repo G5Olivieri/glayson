@@ -154,7 +154,7 @@ const paySchema = Type.Object({
   name: Type.String(),
   amount: Type.Integer(),
   date: Type.String({ format: 'date-time' }),
-  group_id: Type.Optional(Type.String({ format: 'uuid' })),
+  group_id: Type.Union([Type.String({ format: 'uuid' }), Type.Null()]),
   virtual: Type.Boolean()
 });
 
@@ -232,12 +232,12 @@ router.get('/expenses', authorize, handlePromiseExpress(async (req, res) => {
   queryResult = await db.query('SELECT * FROM fixed_expenses WHERE group_id != ALL($1::uuid[]) AND owner_id=$2 AND to_char(start, \'YYYYMM\')<=$3 AND ("end" is null OR to_char("end", \'YYYYMM\')>$3)', [expenses.filter(e => e.group_id !== null).map(e => e.group_id), account.id, `${year}${month.padStart(2, '0')}`]);
 
   res.send([
-    ...expenses.map(e => ({ ...e, virtual: false })),
+    ...expenses.map(e => ({ ...e, amount: parseInt(e.amount, 10), virtual: false })),
     ...queryResult.rows
       .map(({ id, name, amount, start, group_id, created_at, owner_id }) => ({
         id,
         name,
-        amount,
+        amount: parseInt(amount),
         created_at,
         owner_id,
         group_id,
@@ -265,7 +265,7 @@ router.get('/expenses/:id', authorize, handlePromiseExpress(async (req, res) => 
     return res.send({
       id,
       name,
-      amount,
+      amount: parseInt(amount),
       created_at,
       owner_id,
       group_id,
@@ -339,9 +339,10 @@ router.post('/expenses/:id/pay', authorize, handlePromiseExpress(async (req, res
   const account = getAccountFromReq(req);
 
   const validate = ajv.compile<PayType>(paySchema);
-  const isValid = validate(req.body); // ajv.validate<PayType>(paySchema, req.body);
+  const isValid = validate(req.body);
+
   if (!isValid) {
-    return res.send(validate.errors).status(400).end();
+    return res.status(400).send(validate.errors).end();
   }
 
   const { name, date, amount, group_id } = req.body;
