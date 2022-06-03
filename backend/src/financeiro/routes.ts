@@ -144,7 +144,7 @@ const updateExpenseSchema = Type.Object({
   date: Type.String({ format: 'date' }),
   amount: Type.Number(),
   paid: Type.Boolean(),
-  group_id: Type.String({ format: 'uuid' }),
+  group_id: Type.Union([Type.String({ format: 'uuid' }), Type.Null()]),
   only_this_one: Type.Boolean()
 });
 
